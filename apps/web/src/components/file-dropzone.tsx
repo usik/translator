@@ -2,8 +2,11 @@
 
 import * as React from "react";
 import { Upload, FileText, X } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
 
 interface FileDropzoneProps {
   onFileSelect: (file: File) => void;
@@ -38,6 +41,10 @@ export function FileDropzone({
     setIsDragging(false);
     const file = e.dataTransfer.files[0];
     if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error("File exceeds the 20MB limit.");
+        return;
+      }
       onFileSelect(file);
     }
   };
@@ -49,6 +56,10 @@ export function FileDropzone({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error("File exceeds the 20MB limit.");
+        return;
+      }
       onFileSelect(file);
     }
   };

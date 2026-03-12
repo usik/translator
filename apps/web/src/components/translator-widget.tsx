@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeftRight, Loader2, FileCheck } from "lucide-react";
+import { ArrowLeftRight, Loader2, FileCheck, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +19,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslatorStore } from "@/lib/store";
 import { useTranslateText, useTranslateFile } from "@/lib/api";
+import { getLanguageName } from "@/lib/languages";
 
 const MAX_CHARS = 5000;
 
@@ -51,6 +52,13 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [outputFormat, setOutputFormat] = React.useState("txt");
   const [preserveFormat, setPreserveFormat] = React.useState(true);
+  const [detectedLanguage, setDetectedLanguage] = React.useState<string | null>(null);
+  const [copied, setCopied] = React.useState(false);
+
+  const isMac = React.useMemo(
+    () => typeof navigator !== "undefined" && /Mac/.test(navigator.userAgent),
+    []
+  );
 
   const supportsFormatPreservation = selectedFile
     ? FORMAT_PRESERVE_EXTENSIONS.some((ext) =>
@@ -73,6 +81,11 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
       {
         onSuccess: (data) => {
           setTranslatedText(data.translated_text);
+          if (sourceLang === "auto" && data.detected_language) {
+            setDetectedLanguage(data.detected_language);
+          } else {
+            setDetectedLanguage(null);
+          }
         },
       }
     );
@@ -109,6 +122,17 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
     }
   };
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(translatedText);
+      setCopied(true);
+      toast.success("Copied to clipboard!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Failed to copy to clipboard.");
+    }
+  };
+
   return (
     <div className={`w-full ${fullHeight ? "flex-1" : ""}`}>
       <Tabs
@@ -126,10 +150,18 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
             <div className="flex-1">
               <LanguageSelector
                 value={sourceLang}
-                onValueChange={setSourceLang}
+                onValueChange={(val) => {
+                  setSourceLang(val);
+                  setDetectedLanguage(null);
+                }}
                 showAuto
                 label="From"
               />
+              {detectedLanguage && sourceLang === "auto" && (
+                <span className="mt-1 inline-block rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  Detected: {getLanguageName(detectedLanguage)}
+                </span>
+              )}
             </div>
             <Button
               variant="ghost"
@@ -172,7 +204,7 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
                     {sourceText.length} / {MAX_CHARS}
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    Ctrl+Enter to translate
+                    {isMac ? "⌘" : "Ctrl"}+Enter to translate
                   </span>
                 </div>
               </div>
@@ -193,14 +225,38 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
                   <span className="sr-only">Translating your text, please wait...</span>
                 </div>
               ) : (
-                <Textarea
-                  placeholder="Translation will appear here..."
-                  value={translatedText}
-                  readOnly
-                  aria-label="Translation result"
-                  aria-live="polite"
-                  className={`min-h-[200px] resize-none bg-muted/30 ${fullHeight ? "lg:min-h-[400px]" : ""}`}
-                />
+                <div className="relative">
+                  {translatedText && (
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={handleCopy}
+                      aria-label="Copy translation to clipboard"
+                      className="absolute right-2 top-2 z-10"
+                    >
+                      {copied ? (
+                        <Check className="size-4 text-green-500" />
+                      ) : (
+                        <Copy className="size-4" />
+                      )}
+                    </Button>
+                  )}
+                  <Textarea
+                    placeholder="Translation will appear here..."
+                    value={translatedText}
+                    readOnly
+                    aria-label="Translation result"
+                    aria-live="polite"
+                    className={`min-h-[200px] resize-none bg-muted/30 ${fullHeight ? "lg:min-h-[400px]" : ""}`}
+                  />
+                  {translatedText && (
+                    <div className="mt-1">
+                      <span className="text-xs text-muted-foreground">
+                        {translatedText.length} characters
+                      </span>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </div>

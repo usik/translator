@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Generic, TypeVar
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 T = TypeVar("T")
 
@@ -85,7 +85,7 @@ class OutputResult(BaseModel):
 # --- Translation Models ---
 
 class TranslateTextRequest(BaseModel):
-    text: str
+    text: str = Field(..., max_length=10000)
     source_language: str = "auto"
     target_language: str = "ko"
     output_format: str = "text"

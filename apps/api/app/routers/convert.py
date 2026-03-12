@@ -1,6 +1,8 @@
 import structlog
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import Response
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from ..config import Settings
 from ..dependencies import (
@@ -14,6 +16,7 @@ from ..converters import ConverterRegistry
 log = structlog.get_logger()
 
 router = APIRouter(prefix="/api/v1")
+limiter = Limiter(key_func=get_remote_address)
 
 _OUTPUT_CONTENT_TYPES = {
     "pdf": ("application/pdf", ".pdf"),
@@ -24,7 +27,9 @@ _OUTPUT_CONTENT_TYPES = {
 
 
 @router.post("/convert")
+@limiter.limit("20/minute")
 async def convert_file(
+    request: Request,
     file: UploadFile = File(...),
     output_format: str = Form(...),
     settings: Settings = Depends(get_settings),

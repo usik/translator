@@ -1,6 +1,6 @@
 import { HomePageClient } from "./home-client";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://xenith.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tryxenith.com";
 
 const jsonLd = {
   "@context": "https://schema.org",

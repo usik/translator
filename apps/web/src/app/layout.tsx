@@ -39,15 +39,23 @@ export const metadata: Metadata = {
     "AI translation",
     "Korean translator",
     "한글 변환",
+    "한글 번역기",
+    "HWPX 영어 번역",
+    "한글 파일 변환기",
+    "한국어 문서 번역",
+    "한글 PDF 변환",
+    "HWPX 변환",
+    "한글 문서 영어 번역",
+    "공문서 번역",
   ],
   openGraph: {
     type: "website",
     locale: "en_US",
-    alternateLocale: "ko_KR",
+    alternateLocale: ["ko_KR"],
     siteName: "Xenith",
     title: "Xenith - Translate Text, Files & Korean Documents",
     description:
-      "The only online translator with native HWPX (한글) support. Translate text, PDF, DOCX, and Korean documents across 20+ languages.",
+      "The only online translator with native HWPX (한글) support. Translate text, PDF, DOCX, and Korean documents across 20+ languages. 한글 문서 번역 및 HWPX 파일 변환을 지원하는 유일한 온라인 번역기.",
     url: siteUrl,
   },
   twitter: {
@@ -69,6 +77,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+    languages: {
+      'en': siteUrl,
+      'ko': siteUrl,
+    },
   },
 };
 

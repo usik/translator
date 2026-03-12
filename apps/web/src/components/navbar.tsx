@@ -21,6 +21,7 @@ const navLinks = [
 export function Navbar() {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
+  const [sheetOpen, setSheetOpen] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
@@ -84,7 +85,7 @@ export function Navbar() {
             </Button>
           )}
 
-          <Sheet>
+          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger
               render={<Button variant="ghost" size="icon-sm" aria-label="Open menu" />}
             >
@@ -96,7 +97,7 @@ export function Navbar() {
               </SheetHeader>
               <nav className="flex flex-col gap-2 px-4">
                 {navLinks.map((link) => (
-                  <Link key={link.href} href={link.href}>
+                  <Link key={link.href} href={link.href} onClick={() => setSheetOpen(false)}>
                     <Button
                       variant="ghost"
                       className="w-full justify-start"

@@ -5,14 +5,14 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://xenith.app";
 
 const seoData: Record<string, { title: string; description: string }> = {
   "hwpx-to-pdf": {
-    title: "Convert HWPX to PDF Online - Korean 한글 Document Converter",
+    title: "Convert HWPX to PDF Online - Korean 한글 Document Converter | 한글 PDF 변환",
     description:
-      "Convert HWPX (한글) files to PDF online for free. The only tool with native Korean document support. No software installation required.",
+      "Convert HWPX (한글) files to PDF online for free. The only tool with native Korean document support. No software installation required. 한글(HWPX) 파일을 PDF로 무료 변환. 소프트웨어 설치 없이 온라인에서 바로 변환하세요.",
   },
   "hwpx-to-txt": {
-    title: "Extract Text from HWPX - Korean 한글 Text Extractor",
+    title: "Extract Text from HWPX - Korean 한글 Text Extractor | 한글 텍스트 추출",
     description:
-      "Extract text from HWPX (한글) documents online for free. Read Korean government and business documents without installing Hancom Office software.",
+      "Extract text from HWPX (한글) documents online for free. Read Korean government and business documents without installing Hancom Office software. 한글 문서에서 텍스트를 추출하세요. 한컴오피스 설치 없이 공문서를 읽을 수 있습니다.",
   },
   "pdf-to-docx": {
     title: "Convert PDF to DOCX Online - Free PDF to Word Converter",
@@ -62,6 +62,10 @@ export async function generateMetadata({
     },
     alternates: {
       canonical: `/convert/${slug}`,
+      languages: {
+        'en': `/convert/${slug}`,
+        'ko': `/convert/${slug}`,
+      },
     },
   };
 }

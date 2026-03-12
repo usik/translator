@@ -2,8 +2,10 @@ import base64
 import time
 
 import structlog
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import Response
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from ..config import Settings
 from ..dependencies import (
@@ -21,6 +23,7 @@ from ..schemas import SuccessResponse, TranslateResult, TranslateTextRequest
 log = structlog.get_logger()
 
 router = APIRouter(prefix="/api/v1")
+limiter = Limiter(key_func=get_remote_address)
 
 _OUTPUT_CONTENT_TYPES = {
     "pdf": ("application/pdf", ".pdf"),
@@ -30,7 +33,9 @@ _OUTPUT_CONTENT_TYPES = {
 
 
 @router.post("/translate/text")
+@limiter.limit("30/minute")
 async def translate_text(
+    request: Request,
     req: TranslateTextRequest,
     settings: Settings = Depends(get_settings),
     provider_registry: ProviderRegistry = Depends(get_provider_registry),
@@ -96,7 +101,9 @@ async def translate_text(
 
 
 @router.post("/translate")
+@limiter.limit("20/minute")
 async def translate_file(
+    request: Request,
     file: UploadFile | None = File(None),
     text: str | None = Form(None),
     source_language: str = Form("auto"),
