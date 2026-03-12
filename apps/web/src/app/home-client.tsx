@@ -87,7 +87,7 @@ const features: Feature[] = [
     icon: Bookmark,
     title: "Translate Any Page",
     description:
-      "Use our bookmarklet to translate Korean text on any website in one click. No extension needed.",
+      "Use our bookmarklet to translate text on any website in one click. Select, click, done. No extension needed.",
     badge: "New",
   },
   {

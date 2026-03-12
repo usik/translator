@@ -15,15 +15,21 @@ const BOOKMARKLET_CODE = `javascript:void(function(){var t=window.getSelection()
 function TranslatePageInner() {
   const searchParams = useSearchParams();
   const setSourceText = useTranslatorStore((s) => s.setSourceText);
+  const setSourceLang = useTranslatorStore((s) => s.setSourceLang);
+  const setTargetLang = useTranslatorStore((s) => s.setTargetLang);
   const setActiveTab = useTranslatorStore((s) => s.setActiveTab);
 
   useEffect(() => {
     const text = searchParams.get("text");
+    const source = searchParams.get("source");
+    const target = searchParams.get("target");
     if (text) {
       setSourceText(text);
       setActiveTab("text");
+      if (source) setSourceLang(source);
+      if (target) setTargetLang(target);
     }
-  }, [searchParams, setSourceText, setActiveTab]);
+  }, [searchParams, setSourceText, setSourceLang, setTargetLang, setActiveTab]);
 
   return null;
 }
@@ -73,31 +79,41 @@ export function TranslatePageClient() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold">Translate Any Page</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              Drag this link to your bookmark bar:{" "}
-              <a
-                href={BOOKMARKLET_CODE}
-                onClick={(e) => e.preventDefault()}
-                className="font-medium text-primary hover:underline"
-              >
-                Translate with Xenith
-              </a>{" "}
-              — then click it on any page to translate selected Korean text. Or{" "}
+            <p className="mt-1 text-xs text-muted-foreground">
+              Translate text from any website in one click:
+            </p>
+            <ol className="mt-2 space-y-1 text-xs text-muted-foreground">
+              <li>
+                1. Drag this link to your bookmark bar:{" "}
+                <a
+                  href={BOOKMARKLET_CODE}
+                  onClick={(e) => e.preventDefault()}
+                  className="rounded bg-primary/10 px-1.5 py-0.5 font-medium text-primary hover:underline"
+                >
+                  Translate with Xenith
+                </a>
+              </li>
+              <li>2. On any webpage, select the text you want to translate (or select nothing for the full page)</li>
+              <li>3. Click the bookmark — Xenith opens with your text ready to translate</li>
+              <li>4. Pick your languages and hit Translate</li>
+            </ol>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Can&apos;t drag?{" "}
               <button
                 onClick={handleCopyBookmarklet}
                 className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
               >
                 {copied ? (
                   <>
-                    <Check className="inline size-3" /> copied
+                    <Check className="inline size-3" /> Copied
                   </>
                 ) : (
                   <>
-                    <Copy className="inline size-3" /> copy the code
+                    <Copy className="inline size-3" /> Copy the code
                   </>
                 )}
               </button>{" "}
-              and save it as a bookmark URL manually.
+              and paste it as a new bookmark URL.
             </p>
           </div>
         </div>
