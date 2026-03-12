@@ -13,6 +13,7 @@ const inter = Inter({
 });
 
 const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? "";
+const gaId = process.env.NEXT_PUBLIC_GA_ID ?? "";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://xenith.app";
 
@@ -79,6 +80,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
+        {/* Google Analytics */}
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${gaId}');`}
+            </Script>
+          </>
+        )}
         {/* Google AdSense -- only loaded when the publisher ID is configured */}
         {adsenseClientId && (
           <Script
