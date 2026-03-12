@@ -15,7 +15,7 @@ const inter = Inter({
 const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? "";
 const gaId = process.env.NEXT_PUBLIC_GA_ID ?? "";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://xenith.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://web-eight-phi-54.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

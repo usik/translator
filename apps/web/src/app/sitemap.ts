@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://xenith.app";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://web-eight-phi-54.vercel.app";
 
 const conversionSlugs = [
   "hwpx-to-pdf",
