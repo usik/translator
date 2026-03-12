@@ -53,12 +53,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/blog/how-to-translate-hwpx-files`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
   ];
 
   const conversionPages = conversionSlugs.map((slug) => ({

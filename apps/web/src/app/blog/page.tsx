@@ -19,17 +19,14 @@ export const metadata: Metadata = {
   },
 };
 
-const posts = [
-  {
-    slug: "how-to-translate-hwpx-files",
-    title: "How to Translate HWPX Files Online (Without Installing Hancom Office)",
-    titleKo: "한글(HWPX) 파일 온라인 번역 방법 (한컴오피스 설치 없이)",
-    description:
-      "Step-by-step guide to translating Korean HWPX documents to English with formatting preserved.",
-    date: "2026-03-12",
-    tags: ["HWPX", "한글", "Translation", "Guide"],
-  },
-];
+const posts: {
+  slug: string;
+  title: string;
+  titleKo: string;
+  description: string;
+  date: string;
+  tags: string[];
+}[] = [];
 
 export default function BlogPage() {
   return (
