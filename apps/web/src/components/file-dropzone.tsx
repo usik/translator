@@ -71,7 +71,7 @@ export function FileDropzone({
             {formatFileSize(selectedFile.size)}
           </p>
         </div>
-        <Button variant="ghost" size="icon-sm" onClick={onClear}>
+        <Button variant="ghost" size="icon-sm" onClick={onClear} aria-label="Remove selected file">
           <X className="size-4" />
         </Button>
       </div>
@@ -80,12 +80,21 @@ export function FileDropzone({
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
+      aria-label={`Drop zone for ${acceptLabel} files. Click or press Enter to browse.`}
       className={cn(
-        "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-8 transition-colors",
+        "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-8 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         isDragging
           ? "border-primary bg-primary/5"
           : "border-border hover:border-primary/50 hover:bg-muted/30"
@@ -97,6 +106,7 @@ export function FileDropzone({
         accept={accept}
         onChange={handleInputChange}
         className="hidden"
+        aria-label={`Upload file (${acceptLabel})`}
       />
       <Upload className="size-8 text-muted-foreground" />
       <div className="text-center">

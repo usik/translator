@@ -37,12 +37,12 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2">
           <Languages className="size-5 text-primary" />
           <span className="text-lg font-semibold tracking-tight">
-            Trans<span className="text-primary">Late</span>
+            Xen<span className="text-primary">ith</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href}>
               <Button variant="ghost" size="sm">
@@ -85,10 +85,10 @@ export function Navbar() {
           )}
 
           <Sheet>
-            <SheetTrigger>
-              <Button variant="ghost" size="icon-sm" aria-label="Open menu">
-                <Menu className="size-4" />
-              </Button>
+            <SheetTrigger
+              render={<Button variant="ghost" size="icon-sm" aria-label="Open menu" />}
+            >
+              <Menu className="size-4" />
             </SheetTrigger>
             <SheetContent side="right">
               <SheetHeader>

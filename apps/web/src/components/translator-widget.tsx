@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeftRight, Loader2 } from "lucide-react";
+import { ArrowLeftRight, Loader2, FileCheck } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,10 +16,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslatorStore } from "@/lib/store";
 import { useTranslateText, useTranslateFile } from "@/lib/api";
 
 const MAX_CHARS = 5000;
+
+const FORMAT_PRESERVE_EXTENSIONS = [".hwpx", ".docx"];
 
 const outputFormats = [
   { value: "txt", label: "Text (.txt)" },
@@ -47,6 +50,13 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
 
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [outputFormat, setOutputFormat] = React.useState("txt");
+  const [preserveFormat, setPreserveFormat] = React.useState(true);
+
+  const supportsFormatPreservation = selectedFile
+    ? FORMAT_PRESERVE_EXTENSIONS.some((ext) =>
+        selectedFile.name.toLowerCase().endsWith(ext)
+      )
+    : false;
 
   const handleTranslate = () => {
     if (!sourceText.trim()) {
@@ -74,8 +84,9 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
       return;
     }
 
+    const shouldPreserve = preserveFormat && supportsFormatPreservation;
     fileTranslateMutation.mutate(
-      { file: selectedFile, sourceLang, targetLang, outputFormat },
+      { file: selectedFile, sourceLang, targetLang, outputFormat, preserveFormat: shouldPreserve },
       {
         onSuccess: (blob) => {
           const url = URL.createObjectURL(blob);
@@ -153,6 +164,7 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
                     }
                   }}
                   onKeyDown={handleKeyDown}
+                  aria-label="Source text to translate"
                   className={`min-h-[200px] resize-none ${fullHeight ? "lg:min-h-[400px]" : ""}`}
                 />
                 <div className="mt-1 flex items-center justify-between">
@@ -169,17 +181,24 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
             {/* Target panel */}
             <div className="flex flex-col gap-2">
               {translateMutation.isPending ? (
-                <div className={`space-y-3 rounded-lg border border-input p-4 ${fullHeight ? "lg:min-h-[400px]" : "min-h-[200px]"}`}>
+                <div
+                  className={`space-y-3 rounded-lg border border-input p-4 ${fullHeight ? "lg:min-h-[400px]" : "min-h-[200px]"}`}
+                  role="status"
+                  aria-label="Translating text"
+                >
                   <Skeleton className="h-4 w-3/4" />
                   <Skeleton className="h-4 w-full" />
                   <Skeleton className="h-4 w-5/6" />
                   <Skeleton className="h-4 w-2/3" />
+                  <span className="sr-only">Translating your text, please wait...</span>
                 </div>
               ) : (
                 <Textarea
                   placeholder="Translation will appear here..."
                   value={translatedText}
                   readOnly
+                  aria-label="Translation result"
+                  aria-live="polite"
                   className={`min-h-[200px] resize-none bg-muted/30 ${fullHeight ? "lg:min-h-[400px]" : ""}`}
                 />
               )}
@@ -243,6 +262,27 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
             onClear={() => setSelectedFile(null)}
           />
 
+          {/* Preserve format toggle */}
+          {supportsFormatPreservation && (
+            <div className="mt-3 flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-3 py-2">
+              <Checkbox
+                id="preserve-format"
+                checked={preserveFormat}
+                onCheckedChange={(checked) => setPreserveFormat(checked === true)}
+              />
+              <label
+                htmlFor="preserve-format"
+                className="flex cursor-pointer items-center gap-1.5 text-sm font-medium"
+              >
+                <FileCheck className="size-3.5 text-primary" />
+                Preserve original formatting
+              </label>
+              <span className="text-xs text-muted-foreground">
+                — keeps headers, tables, and layout intact
+              </span>
+            </div>
+          )}
+
           {/* Output format selector */}
           <div className="mt-4 flex items-end gap-4">
             <div className="flex flex-col gap-1">
@@ -250,7 +290,7 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
                 Output Format
               </span>
               <Select value={outputFormat} onValueChange={(val) => { if (val !== null) setOutputFormat(val); }}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px]" aria-label="Output file format">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

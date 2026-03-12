@@ -32,6 +32,10 @@ async def convert_file(
     converter_registry: ConverterRegistry = Depends(get_converter_registry),
 ):
     """Convert a file to a different format (extract text then convert)."""
+    # Normalize common aliases
+    if output_format == "txt":
+        output_format = "text"
+
     file_bytes = await file.read()
 
     max_bytes = settings.max_file_size_mb * 1024 * 1024

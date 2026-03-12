@@ -1,235 +1,117 @@
-"use client";
+import type { Metadata } from "next";
+import { ConvertSlugClient } from "./client";
 
-import * as React from "react";
-import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Download, Loader2, CheckCircle2 } from "lucide-react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileDropzone } from "@/components/file-dropzone";
-import { useConvertFile } from "@/lib/api";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://xenith.app";
 
-interface ConversionConfig {
-  title: string;
-  description: string;
-  acceptedFormats: string;
-  acceptLabel: string;
-  outputFormat: string;
-}
-
-const conversionConfigs: Record<string, ConversionConfig> = {
-  "pdf-to-docx": {
-    title: "PDF to DOCX",
-    description: "Convert your PDF documents to editable Word format.",
-    acceptedFormats: ".pdf",
-    acceptLabel: "PDF",
-    outputFormat: "docx",
-  },
-  "pdf-to-txt": {
-    title: "PDF to Text",
-    description: "Extract text content from PDF files.",
-    acceptedFormats: ".pdf",
-    acceptLabel: "PDF",
-    outputFormat: "txt",
-  },
-  "docx-to-pdf": {
-    title: "DOCX to PDF",
-    description: "Convert Word documents to PDF format.",
-    acceptedFormats: ".docx",
-    acceptLabel: "DOCX",
-    outputFormat: "pdf",
-  },
-  "docx-to-txt": {
-    title: "DOCX to Text",
-    description: "Extract text from Word documents.",
-    acceptedFormats: ".docx",
-    acceptLabel: "DOCX",
-    outputFormat: "txt",
-  },
-  "image-to-txt": {
-    title: "Image to Text (OCR)",
-    description: "Extract text from images using OCR technology.",
-    acceptedFormats: ".png,.jpg,.jpeg,.webp,.bmp,.tiff",
-    acceptLabel: "PNG, JPG, JPEG, WebP, BMP, TIFF",
-    outputFormat: "txt",
+const seoData: Record<string, { title: string; description: string }> = {
+  "hwpx-to-pdf": {
+    title: "Convert HWPX to PDF Online - Korean 한글 Document Converter",
+    description:
+      "Convert HWPX (한글) files to PDF online for free. The only tool with native Korean document support. No software installation required.",
   },
   "hwpx-to-txt": {
-    title: "HWPX to Text",
-    description: "Extract text from Korean HWPX documents.",
-    acceptedFormats: ".hwpx",
-    acceptLabel: "HWPX",
-    outputFormat: "txt",
+    title: "Extract Text from HWPX - Korean 한글 Text Extractor",
+    description:
+      "Extract text from HWPX (한글) documents online for free. Read Korean government and business documents without installing Hancom Office software.",
   },
-  "hwpx-to-pdf": {
-    title: "HWPX to PDF",
-    description: "Convert Korean HWPX documents to PDF format.",
-    acceptedFormats: ".hwpx",
-    acceptLabel: "HWPX",
-    outputFormat: "pdf",
+  "pdf-to-docx": {
+    title: "Convert PDF to DOCX Online - Free PDF to Word Converter",
+    description:
+      "Convert PDF files to editable Word (DOCX) format online for free. Fast, accurate AI-powered conversion that preserves formatting and layout.",
+  },
+  "docx-to-pdf": {
+    title: "Convert DOCX to PDF Online - Free Word to PDF Converter",
+    description:
+      "Convert Word (DOCX) documents to PDF format online for free. Preserve formatting, fonts, and layout with fast AI-powered conversion.",
+  },
+  "pdf-to-txt": {
+    title: "Extract Text from PDF Online - Free PDF Text Extractor",
+    description:
+      "Extract text content from PDF files online for free. Powered by AI for accurate extraction from scanned documents, tables, and complex layouts.",
+  },
+  "docx-to-txt": {
+    title: "Extract Text from DOCX Online - Free Word Text Extractor",
+    description:
+      "Extract plain text from Word (DOCX) documents online for free. Handles tables, paragraphs, headers, and complex document layouts accurately.",
+  },
+  "image-to-txt": {
+    title: "Image to Text (OCR) Online - Free Image Text Extractor",
+    description:
+      "Extract text from images using AI-powered OCR. Supports PNG, JPG, WebP, BMP, and TIFF. Fast and accurate text recognition in 20+ languages.",
   },
 };
 
-type Step = "upload" | "processing" | "download";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const data = seoData[slug];
 
-export default function ConvertSlugPage() {
-  const params = useParams();
-  const router = useRouter();
-  const slug = params.slug as string;
-  const config = conversionConfigs[slug];
-
-  const [step, setStep] = React.useState<Step>("upload");
-  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
-  const [downloadUrl, setDownloadUrl] = React.useState<string | null>(null);
-  const [downloadFilename, setDownloadFilename] = React.useState<string>("");
-
-  const convertMutation = useConvertFile();
-
-  // Clean up object URL on unmount
-  React.useEffect(() => {
-    return () => {
-      if (downloadUrl) {
-        URL.revokeObjectURL(downloadUrl);
-      }
-    };
-  }, [downloadUrl]);
-
-  if (!config) {
-    return (
-      <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6 lg:px-8">
-        <h1 className="text-2xl font-bold">Conversion not found</h1>
-        <p className="mt-2 text-muted-foreground">
-          The conversion type &ldquo;{slug}&rdquo; is not supported.
-        </p>
-        <Button
-          variant="outline"
-          className="mt-4"
-          onClick={() => router.push("/convert")}
-        >
-          <ArrowLeft className="size-4" />
-          Back to conversions
-        </Button>
-      </div>
-    );
+  if (!data) {
+    return { title: "Conversion Tool" };
   }
 
-  const handleConvert = () => {
-    if (!selectedFile) return;
+  return {
+    title: data.title,
+    description: data.description,
+    openGraph: {
+      title: `${data.title} | Xenith`,
+      description: data.description,
+    },
+    alternates: {
+      canonical: `/convert/${slug}`,
+    },
+  };
+}
 
-    setStep("processing");
-    convertMutation.mutate(
-      { file: selectedFile, outputFormat: config.outputFormat },
+function getBreadcrumbJsonLd(slug: string, title: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
       {
-        onSuccess: (blob) => {
-          const url = URL.createObjectURL(blob);
-          const filename = `${selectedFile.name.replace(/\.[^.]+$/, "")}.${config.outputFormat}`;
-          setDownloadUrl(url);
-          setDownloadFilename(filename);
-          setStep("download");
-          toast.success("File converted successfully!");
-        },
-        onError: () => {
-          setStep("upload");
-        },
-      }
-    );
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Conversion Tools",
+        item: `${siteUrl}/convert`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: title,
+        item: `${siteUrl}/convert/${slug}`,
+      },
+    ],
   };
+}
 
-  const handleDownload = () => {
-    if (!downloadUrl) return;
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    a.download = downloadFilename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-
-  const handleReset = () => {
-    if (downloadUrl) {
-      URL.revokeObjectURL(downloadUrl);
-    }
-    setSelectedFile(null);
-    setDownloadUrl(null);
-    setDownloadFilename("");
-    setStep("upload");
-  };
+export default async function ConvertSlugPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const data = seoData[slug];
+  const breadcrumbTitle = data?.title.split(" - ")[0] || "Conversion Tool";
+  const breadcrumbJsonLd = getBreadcrumbJsonLd(slug, breadcrumbTitle);
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
-      <Button
-        variant="ghost"
-        size="sm"
-        className="mb-6"
-        onClick={() => router.push("/convert")}
-      >
-        <ArrowLeft className="size-4" />
-        All conversions
-      </Button>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">{config.title}</CardTitle>
-          <p className="text-sm text-muted-foreground">{config.description}</p>
-        </CardHeader>
-        <CardContent>
-          {/* Step 1: Upload */}
-          {step === "upload" && (
-            <div className="space-y-4">
-              <FileDropzone
-                onFileSelect={setSelectedFile}
-                selectedFile={selectedFile}
-                onClear={() => setSelectedFile(null)}
-                accept={config.acceptedFormats}
-                acceptLabel={config.acceptLabel}
-              />
-              <div className="flex justify-end">
-                <Button
-                  onClick={handleConvert}
-                  disabled={!selectedFile}
-                  size="lg"
-                >
-                  Convert
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Step 2: Processing */}
-          {step === "processing" && (
-            <div className="flex flex-col items-center justify-center gap-4 py-12">
-              <Loader2 className="size-10 animate-spin text-primary" />
-              <div className="text-center">
-                <p className="font-medium">Converting your file...</p>
-                <p className="text-sm text-muted-foreground">
-                  This may take a moment
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Step 3: Download */}
-          {step === "download" && (
-            <div className="flex flex-col items-center justify-center gap-4 py-12">
-              <CheckCircle2 className="size-10 text-green-500" />
-              <div className="text-center">
-                <p className="font-medium">Conversion complete!</p>
-                <p className="text-sm text-muted-foreground">
-                  {downloadFilename}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Button onClick={handleDownload} size="lg">
-                  <Download className="size-4" />
-                  Download
-                </Button>
-                <Button variant="outline" onClick={handleReset} size="lg">
-                  Convert Another
-                </Button>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd),
+        }}
+      />
+      <ConvertSlugClient />
+    </>
   );
 }

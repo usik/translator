@@ -14,10 +14,6 @@ class ProviderRegistry:
         self._providers: dict[str, LLMProvider] = {}
 
     def register(self, provider: LLMProvider) -> None:
-        if not isinstance(provider, LLMProvider):
-            raise TypeError(
-                f"{type(provider).__name__} does not satisfy the LLMProvider protocol"
-            )
         self._providers[provider.provider_name] = provider
         log.info("Registered LLM provider", provider=provider.provider_name)
 

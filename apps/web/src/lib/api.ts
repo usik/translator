@@ -16,8 +16,8 @@ export async function translateText(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       text,
-      source_lang: sourceLang === "auto" ? null : sourceLang,
-      target_lang: targetLang,
+      source_language: sourceLang === "auto" ? "auto" : sourceLang,
+      target_language: targetLang,
     }),
   });
 
@@ -26,23 +26,29 @@ export async function translateText(
     throw new Error(error.detail || "Translation failed");
   }
 
-  return res.json();
+  const json = await res.json();
+  // Backend wraps response in { success: true, data: { ... } }
+  return json.data ?? json;
 }
 
 export async function translateFile(
   file: File,
   sourceLang: string,
   targetLang: string,
-  outputFormat?: string
+  outputFormat?: string,
+  preserveFormat?: boolean
 ): Promise<Blob> {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("target_lang", targetLang);
+  formData.append("target_language", targetLang);
   if (sourceLang && sourceLang !== "auto") {
-    formData.append("source_lang", sourceLang);
+    formData.append("source_language", sourceLang);
   }
   if (outputFormat) {
     formData.append("output_format", outputFormat);
+  }
+  if (preserveFormat) {
+    formData.append("preserve_format", "true");
   }
 
   const res = await fetch(`${API_URL}/api/v1/translate`, {
@@ -105,12 +111,14 @@ export function useTranslateFile() {
       sourceLang,
       targetLang,
       outputFormat,
+      preserveFormat,
     }: {
       file: File;
       sourceLang: string;
       targetLang: string;
       outputFormat?: string;
-    }) => translateFile(file, sourceLang, targetLang, outputFormat),
+      preserveFormat?: boolean;
+    }) => translateFile(file, sourceLang, targetLang, outputFormat, preserveFormat),
     onError: (error: Error) => {
       toast.error(error.message || "File translation failed. Please try again.");
     },

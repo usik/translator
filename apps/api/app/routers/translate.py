@@ -113,6 +113,8 @@ async def translate_file(
         target_language = settings.default_target_language
     if not output_format:
         output_format = settings.default_output_format
+    if output_format == "txt":
+        output_format = "text"
 
     provider_name = settings.default_provider
     model = settings.default_model
@@ -143,7 +145,12 @@ async def translate_file(
                 )
 
             filename = file.filename or "upload"
-            extractor = extractor_registry.resolve(filename, file.content_type)
+
+            # When preserve_format, prefer extractor with extract_structured support
+            if preserve_format:
+                extractor = extractor_registry.resolve_structured(filename)
+            else:
+                extractor = extractor_registry.resolve(filename, file.content_type)
             if extractor is None:
                 raise HTTPException(
                     status_code=400,

@@ -14,10 +14,6 @@ class ConverterRegistry:
         self._converters: dict[str, Converter] = {}
 
     def register(self, converter: Converter) -> None:
-        if not isinstance(converter, Converter):
-            raise TypeError(
-                f"{type(converter).__name__} does not satisfy the Converter protocol"
-            )
         self._converters[converter.format_name] = converter
         log.info("Registered output converter", format=converter.format_name)
 

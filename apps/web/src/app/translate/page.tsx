@@ -1,21 +1,20 @@
-"use client";
+import type { Metadata } from "next";
+import { TranslatePageClient } from "./client";
 
-import { TranslatorWidget } from "@/components/translator-widget";
+export const metadata: Metadata = {
+  title: "Translate Text & Files",
+  description:
+    "Translate text, PDF, DOCX, and HWPX files between 20+ languages. The only translator with native Korean 한글 document support.",
+  openGraph: {
+    title: "Translate Text & Files | Xenith",
+    description:
+      "AI-powered translation for text and documents. Native HWPX (한글) support. 20+ languages.",
+  },
+  alternates: {
+    canonical: "/translate",
+  },
+};
 
 export default function TranslatePage() {
-  return (
-    <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-5xl flex-col px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-          Translate
-        </h1>
-        <p className="mt-1 text-muted-foreground">
-          Translate text or files between 20+ languages
-        </p>
-      </div>
-      <div className="flex-1">
-        <TranslatorWidget fullHeight />
-      </div>
-    </div>
-  );
+  return <TranslatePageClient />;
 }

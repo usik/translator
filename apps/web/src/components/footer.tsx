@@ -5,9 +5,9 @@ export function Footer() {
     <footer className="border-t border-border/40 bg-background">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6 lg:px-8">
         <p className="text-sm text-muted-foreground">
-          Built with care. Your files are automatically deleted after processing.
+          Xenith &mdash; Your files are automatically deleted after processing.
         </p>
-        <nav className="flex items-center gap-4">
+        <nav aria-label="Footer navigation" className="flex items-center gap-4">
           <Link
             href="/translate"
             className="text-sm text-muted-foreground transition-colors hover:text-foreground"

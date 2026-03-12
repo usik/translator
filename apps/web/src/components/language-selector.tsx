@@ -34,7 +34,7 @@ export function LanguageSelector({
         </span>
       )}
       <Select value={value} onValueChange={(val) => { if (val !== null) onValueChange(val); }}>
-        <SelectTrigger className="w-full min-w-[160px]">
+        <SelectTrigger className="w-full min-w-[160px]" aria-label={label ? `${label} language` : "Select language"}>
           <SelectValue placeholder="Select language" />
         </SelectTrigger>
         <SelectContent>
