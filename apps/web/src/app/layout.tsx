@@ -91,6 +91,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="naver-site-verification" content="2db42bf6b0c7c79a1d5a5b5fe27dc0fd57cf2515" />
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         {/* Google Analytics */}
         {gaId && (
