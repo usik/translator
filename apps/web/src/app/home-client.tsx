@@ -11,6 +11,7 @@ import {
   FileType,
   FileCode,
   Globe,
+  Bookmark,
   ArrowRight,
   type LucideIcon,
 } from "lucide-react";
@@ -81,6 +82,13 @@ const features: Feature[] = [
     title: "Format Conversion",
     description:
       "Convert between PDF, DOCX, HWPX, and plain text. Extract text from images via OCR.",
+  },
+  {
+    icon: Bookmark,
+    title: "Translate Any Page",
+    description:
+      "Use our bookmarklet to translate Korean text on any website in one click. No extension needed.",
+    badge: "New",
   },
   {
     icon: Shield,
