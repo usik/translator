@@ -32,6 +32,14 @@ export function Footer() {
           >
             Terms
           </Link>
+          <a
+            href="https://forms.gle/PLACEHOLDER"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Feedback
+          </a>
         </nav>
       </div>
     </footer>

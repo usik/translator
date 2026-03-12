@@ -16,6 +16,7 @@ import {
 const navLinks = [
   { href: "/translate", label: "Translate" },
   { href: "/convert", label: "Convert" },
+  { href: "/blog", label: "Blog" },
 ];
 
 export function Navbar() {

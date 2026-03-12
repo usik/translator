@@ -46,6 +46,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  const blogPosts = [
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/blog/how-to-translate-hwpx-files`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+  ];
+
   const conversionPages = conversionSlugs.map((slug) => ({
     url: `${baseUrl}/convert/${slug}`,
     lastModified: new Date(),
@@ -53,5 +68,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...conversionPages];
+  return [...staticPages, ...blogPosts, ...conversionPages];
 }
