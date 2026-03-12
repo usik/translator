@@ -33,7 +33,7 @@ export function Footer() {
             Terms
           </Link>
           <a
-            href="https://forms.gle/PLACEHOLDER"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfuPdbfsz69XeauhvQN_rsYUVNzj9RIcE5ryBDiCohphJ0a5w/viewform"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-muted-foreground transition-colors hover:text-foreground"
