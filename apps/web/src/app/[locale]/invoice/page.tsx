@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Invoice Processing | Xenith",
     description:
-      "AI-powered invoice extraction and expense report generation. CJK invoice support.",
+      "AI-powered invoice extraction and expense report generation. Korean, Japanese, and Chinese invoice support.",
   },
   alternates: {
     canonical: "/invoice",

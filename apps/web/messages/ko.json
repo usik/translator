@@ -69,7 +69,7 @@
   },
   "InvoicePage": {
     "badge": "한국어 및 일본어 인보이스 지원",
-    "heroTitle": "CJK 인보이스를 구조화된 보고서로",
+    "heroTitle": "인보이스를 구조화된 보고서로",
     "heroHighlight": " — 즉시 변환",
     "heroDescription": "한국 세금계산서, 일본 適格請求書, 중국 发票를 드래그하세요. Xenith가 모든 항목을 추출하고, 계산을 검증하고, 경비 보고서를 작성합니다 — 템플릿도, 수작업도 필요 없습니다.",
     "dropZone": "인보이스 파일을 여기에 놓거나 클릭하여 선택하세요",
@@ -103,7 +103,7 @@
     "step3Description": "모든 플래그가 표시된 깔끔한 Excel 또는 CSV를 받으세요. 회계 처리에 바로 사용 가능합니다.",
     "capabilitiesEyebrow": "기능",
     "capabilitiesTitle": "Xenith 인보이스가 해드리는 일",
-    "featureCjkTitle": "CJK 기본 지원",
+    "featureCjkTitle": "한국어·일본어·중국어 지원",
     "featureCjkDescription": "한국 세금계산서, 일본 適格請求書, 중국 增值税发票를 기본 지원 — OCR 템플릿이나 로케일 설정이 필요 없습니다.",
     "featureMathTitle": "계산 검증",
     "featureMathDescription": "모든 소계, 세액, 합계를 교차 검증합니다. 불일치는 출력 시트에 자동으로 표시됩니다.",

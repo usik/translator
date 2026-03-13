@@ -69,7 +69,7 @@
   },
   "InvoicePage": {
     "badge": "韓国語・日本語の請求書に対応",
-    "heroTitle": "CJK請求書を構造化レポートに",
+    "heroTitle": "請求書を構造化レポートに",
     "heroHighlight": " — 即座に変換",
     "heroDescription": "韓国の세금계산서、日本の適格請求書、中国の发票をドラッグしてください。Xenithがすべての項目を抽出し、計算を検証し、経費レポートを作成します — テンプレートも手作業も不要です。",
     "dropZone": "請求書ファイルをここにドロップ、またはクリックして選択",
@@ -103,7 +103,7 @@
     "step3Description": "すべてのフラグが表示されたExcelまたはCSVを取得。経理処理にすぐ使えます。",
     "capabilitiesEyebrow": "機能",
     "capabilitiesTitle": "Xenith Invoiceができること",
-    "featureCjkTitle": "CJKネイティブ対応",
+    "featureCjkTitle": "韓国語・日本語・中国語対応",
     "featureCjkDescription": "韓国の세금계산서、日本の適格請求書、中国の增值税发票にネイティブ対応 — OCRテンプレートやロケール設定は不要です。",
     "featureMathTitle": "計算検証",
     "featureMathDescription": "すべての小計、税額、合計をクロスチェックします。不一致は出力シートに自動的にフラグ表示されます。",

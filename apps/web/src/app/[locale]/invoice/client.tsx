@@ -449,7 +449,7 @@ export function InvoicePageClient() {
             viewport={{ once: true }}
             variants={stagger}
           >
-            {/* CJK — spans full width on mobile */}
+            {/* AI extraction — spans full width */}
             <motion.div variants={fadeIn} className="rounded-xl border border-border bg-card p-6 sm:col-span-2">
               <Sparkles className="size-6 text-primary" />
               <h3 className="mt-3 text-lg font-semibold">{t("featureAiTitle")}</h3>

@@ -69,7 +69,7 @@
   },
   "InvoicePage": {
     "badge": "Now supports Korean & Japanese invoices",
-    "heroTitle": "Turn CJK Invoices Into Structured Reports",
+    "heroTitle": "Turn Any Invoice Into a Structured Report",
     "heroHighlight": " — Instantly",
     "heroDescription": "Drag in Korean 세금계산서, Japanese 適格請求書, or Chinese 发票. Xenith extracts every field, validates the math, and builds your expense report — no templates, no manual entry.",
     "dropZone": "Drop invoices here, or click to browse",
@@ -103,7 +103,7 @@
     "step3Description": "Get a clean Excel or CSV with all flags highlighted. Ready for accounting.",
     "capabilitiesEyebrow": "CAPABILITIES",
     "capabilitiesTitle": "What Xenith Invoice does for you",
-    "featureCjkTitle": "Native CJK Support",
+    "featureCjkTitle": "Korean, Japanese & Chinese Support",
     "featureCjkDescription": "Reads Korean 세금계산서, Japanese 適格請求書, and Chinese 增值税发票 natively — no OCR templates, no locale config.",
     "featureMathTitle": "Math Validation",
     "featureMathDescription": "Every subtotal, tax, and total is cross-checked. Discrepancies are flagged automatically in the output sheet.",
