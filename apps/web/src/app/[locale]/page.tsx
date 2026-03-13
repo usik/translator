@@ -1,6 +1,26 @@
+import type { Metadata } from "next";
 import { HomePageClient } from "./home-client";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tryxenith.com";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+
+  return {
+    alternates: {
+      canonical: `${siteUrl}/${locale}`,
+      languages: {
+        en: `${siteUrl}/en`,
+        ko: `${siteUrl}/ko`,
+        ja: `${siteUrl}/ja`,
+      },
+    },
+  };
+}
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -8,7 +28,7 @@ const jsonLd = {
   name: "Xenith",
   url: siteUrl,
   description:
-    "AI-powered translation for text and files. The only translator with native HWPX (한글) support. 20+ languages, PDF, DOCX, HWPX, and OCR.",
+    "AI-powered translation for text and files. The only translator with native HWPX (\ud55c\uae00) support. 20+ languages, PDF, DOCX, HWPX, and OCR.",
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "Any",
   browserRequirements: "Requires a modern web browser",
@@ -21,7 +41,7 @@ const jsonLd = {
     availability: "https://schema.org/InStock",
   },
   featureList: [
-    "HWPX (한글) document translation and conversion",
+    "HWPX (\ud55c\uae00) document translation and conversion",
     "PDF, DOCX, TXT file translation",
     "20+ language support",
     "OCR text extraction from images",

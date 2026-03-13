@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Languages, Moon, Sun, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,17 +13,19 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-
-const navLinks = [
-  { href: "/translate", label: "Translate" },
-  { href: "/convert", label: "Convert" },
-  { href: "/blog", label: "Blog" },
-];
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 export function Navbar() {
+  const t = useTranslations("Navbar");
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
   const [sheetOpen, setSheetOpen] = React.useState(false);
+
+  const navLinks = [
+    { href: "/translate" as const, label: t("translate") },
+    { href: "/convert" as const, label: t("fileConverter") },
+    { href: "/blog" as const, label: t("blog") },
+  ];
 
   React.useEffect(() => {
     setMounted(true);
@@ -53,48 +56,50 @@ export function Navbar() {
             </Link>
           ))}
 
-          {mounted && (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-            >
-              {resolvedTheme === "dark" ? (
-                <Sun className="size-4" />
-              ) : (
-                <Moon className="size-4" />
-              )}
-            </Button>
-          )}
+          <LanguageSwitcher />
+
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={toggleTheme}
+            aria-label={t("toggleTheme")}
+            className={mounted ? undefined : "invisible"}
+          >
+            {mounted && resolvedTheme === "dark" ? (
+              <Sun className="size-4" />
+            ) : (
+              <Moon className="size-4" />
+            )}
+          </Button>
         </nav>
 
         {/* Mobile Nav */}
         <div className="flex items-center gap-1 md:hidden">
-          {mounted && (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-            >
-              {resolvedTheme === "dark" ? (
-                <Sun className="size-4" />
-              ) : (
-                <Moon className="size-4" />
-              )}
-            </Button>
-          )}
+          <LanguageSwitcher />
+
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={toggleTheme}
+            aria-label={t("toggleTheme")}
+            className={mounted ? undefined : "invisible"}
+          >
+            {mounted && resolvedTheme === "dark" ? (
+              <Sun className="size-4" />
+            ) : (
+              <Moon className="size-4" />
+            )}
+          </Button>
 
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger
-              render={<Button variant="ghost" size="icon-sm" aria-label="Open menu" />}
+              render={<Button variant="ghost" size="icon-sm" aria-label={t("openMenu")} />}
             >
               <Menu className="size-4" />
             </SheetTrigger>
             <SheetContent side="right">
               <SheetHeader>
-                <SheetTitle>Navigation</SheetTitle>
+                <SheetTitle>{t("navigation")}</SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-2 px-4">
                 {navLinks.map((link) => (

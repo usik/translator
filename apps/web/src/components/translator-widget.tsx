@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useLocale } from "next-intl";
 import { ArrowLeftRight, Loader2, FileCheck, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -55,10 +56,17 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
   const [detectedLanguage, setDetectedLanguage] = React.useState<string | null>(null);
   const [copied, setCopied] = React.useState(false);
 
-  const isMac = React.useMemo(
-    () => typeof navigator !== "undefined" && /Mac/.test(navigator.userAgent),
-    []
-  );
+  const locale = useLocale();
+
+  const [isMac, setIsMac] = React.useState(false);
+  React.useEffect(() => {
+    setIsMac(/Mac/.test(navigator.userAgent));
+  }, []);
+
+  // Sync target language to page locale on mount
+  React.useEffect(() => {
+    setTargetLang(locale);
+  }, [locale, setTargetLang]);
 
   const supportsFormatPreservation = selectedFile
     ? FORMAT_PRESERVE_EXTENSIONS.some((ext) =>

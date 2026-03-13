@@ -15,6 +15,7 @@ import {
   ArrowRight,
   type LucideIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -45,106 +46,101 @@ const fadeIn = {
 
 interface Feature {
   icon: LucideIcon;
-  title: string;
-  description: string;
-  badge?: string;
+  titleKey: string;
+  descriptionKey: string;
+  badgeKey?: string;
 }
 
-const features: Feature[] = [
+const featureDefinitions: Feature[] = [
   {
     icon: FileCode,
-    title: "Native HWPX Support",
-    description:
-      "The only online translator with full HWPX (한글) support. Translate and convert Korean government and business documents seamlessly.",
-    badge: "Exclusive",
+    titleKey: "featureNativeHwpxTitle",
+    descriptionKey: "featureNativeHwpxDescription",
+    badgeKey: "featureNativeHwpxBadge",
   },
   {
     icon: Zap,
-    title: "AI-Powered Translation",
-    description:
-      "Powered by Gemini 2.5 Flash for fast, accurate translation across 20+ languages.",
+    titleKey: "featureAiTitle",
+    descriptionKey: "featureAiDescription",
   },
   {
     icon: FileText,
-    title: "Document Translation",
-    description:
-      "Translate HWPX and DOCX files with full format preservation — headers, tables, and styles stay intact. PDF and TXT supported via text extraction.",
-    badge: "Format-Preserving",
+    titleKey: "featureDocTranslationTitle",
+    descriptionKey: "featureDocTranslationDescription",
+    badgeKey: "featureDocTranslationBadge",
   },
   {
     icon: Globe,
-    title: "20+ Languages",
-    description:
-      "Korean, English, Japanese, Chinese, Spanish, French, German, and many more.",
+    titleKey: "featureLanguagesTitle",
+    descriptionKey: "featureLanguagesDescription",
   },
   {
     icon: FileStack,
-    title: "Format Conversion",
-    description:
-      "Convert between PDF, DOCX, HWPX, and plain text. Extract text from images via OCR.",
+    titleKey: "featureConversionTitle",
+    descriptionKey: "featureConversionDescription",
   },
   {
     icon: Bookmark,
-    title: "Translate Any Page",
-    description:
-      "Use our bookmarklet to translate text on any website in one click. Select, click, done. No extension needed.",
-    badge: "New",
+    titleKey: "featureBookmarkletTitle",
+    descriptionKey: "featureBookmarkletDescription",
+    badgeKey: "featureBookmarkletBadge",
   },
   {
     icon: Shield,
-    title: "Private & Secure",
-    description:
-      "Your files are automatically deleted after processing. No data is stored.",
+    titleKey: "featurePrivateTitle",
+    descriptionKey: "featurePrivateDescription",
   },
 ];
 
-interface ConvertTool {
+interface ConvertToolDef {
   icon: LucideIcon;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   slug: string;
 }
 
-const convertTools: ConvertTool[] = [
+const convertToolDefinitions: ConvertToolDef[] = [
   {
     icon: FileCode,
-    title: "HWPX to PDF",
-    description: "Convert Korean 한글 documents to PDF",
+    titleKey: "convertHwpxToPdf",
+    descriptionKey: "convertHwpxToPdfDesc",
     slug: "hwpx-to-pdf",
   },
   {
     icon: FileCode,
-    title: "HWPX to Text",
-    description: "Extract text from 한글 documents",
+    titleKey: "convertHwpxToText",
+    descriptionKey: "convertHwpxToTextDesc",
     slug: "hwpx-to-txt",
   },
   {
     icon: FileOutput,
-    title: "PDF to DOCX",
-    description: "Convert PDF to editable Word format",
+    titleKey: "convertPdfToDocx",
+    descriptionKey: "convertPdfToDocxDesc",
     slug: "pdf-to-docx",
   },
   {
     icon: FileInput,
-    title: "DOCX to PDF",
-    description: "Convert Word documents to PDF",
+    titleKey: "convertDocxToPdf",
+    descriptionKey: "convertDocxToPdfDesc",
     slug: "docx-to-pdf",
   },
   {
     icon: FileType,
-    title: "PDF to Text",
-    description: "Extract text content from PDFs",
+    titleKey: "convertPdfToText",
+    descriptionKey: "convertPdfToTextDesc",
     slug: "pdf-to-txt",
   },
   {
     icon: Image,
-    title: "Image to Text",
-    description: "Extract text from images (OCR)",
+    titleKey: "convertImageToText",
+    descriptionKey: "convertImageToTextDesc",
     slug: "image-to-txt",
   },
 ];
 
 export function HomePageClient() {
+  const t = useTranslations("HomePage");
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -163,23 +159,22 @@ export function HomePageClient() {
               transition={{ duration: 0.4 }}
             >
               <FileCode className="size-4" aria-hidden="true" />
-              The only translator with native HWPX support
+              {t("heroBadge")}
             </motion.div>
             <motion.h1
               className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
               variants={fadeInUp}
               transition={{ duration: 0.4 }}
             >
-              Translate{" "}
-              <span className="text-primary">Anything</span>
+              {t("heroTitle")}
+              <span className="text-primary">{t("heroTitleHighlight")}</span>
             </motion.h1>
             <motion.p
               className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground"
               variants={fadeInUp}
               transition={{ duration: 0.4 }}
             >
-              AI-powered translation for text, documents, and Korean 한글 files.
-              20+ languages. PDF, DOCX, HWPX, and more.
+              {t("heroDescription")}
             </motion.p>
           </motion.div>
 
@@ -213,21 +208,18 @@ export function HomePageClient() {
             </div>
             <div>
               <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
-                Format-Preserving Translation
+                {t("formatPreservingTitle")}
               </h2>
               <p className="mt-2 max-w-2xl text-muted-foreground">
-                Xenith is the only online tool that translates HWPX (한글) and DOCX
-                files while perfectly preserving their original formatting — headers,
-                tables, styles, and layout stay intact. No other translator supports
-                HWPX, the standard format for Korean government and legal documents.
+                {t("formatPreservingDescription")}
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap justify-center gap-2">
-              <Badge variant="default">HWPX — Exclusive</Badge>
-              <Badge variant="secondary">DOCX</Badge>
-              <Badge variant="secondary">Translate</Badge>
-              <Badge variant="secondary">Extract</Badge>
-              <Badge variant="secondary">Convert</Badge>
+              <Badge variant="default">{t("badgeExclusive")}</Badge>
+              <Badge variant="secondary">{t("badgeDOCX")}</Badge>
+              <Badge variant="secondary">{t("badgeTranslate")}</Badge>
+              <Badge variant="secondary">{t("badgeExtract")}</Badge>
+              <Badge variant="secondary">{t("badgeConvert")}</Badge>
             </div>
           </motion.div>
         </div>
@@ -245,14 +237,13 @@ export function HomePageClient() {
             transition={{ duration: 0.3 }}
           >
             <Badge variant="outline" className="mb-3">
-              Before &amp; After
+              {t("beforeAfter")}
             </Badge>
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              See It In Action
+              {t("seeItInAction")}
             </h2>
             <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-              Your document structure stays pixel-perfect. Headers, tables,
-              formatting — everything is preserved exactly as the original.
+              {t("seeItInActionDescription")}
             </p>
           </motion.div>
 
@@ -269,7 +260,7 @@ export function HomePageClient() {
                 <TabsList>
                   <TabsTrigger value="hwpx">
                     <FileCode className="size-4" />
-                    HWPX (한글)
+                    HWPX ({"\ud55c\uae00"})
                   </TabsTrigger>
                   <TabsTrigger value="docx">
                     <FileText className="size-4" />
@@ -278,7 +269,7 @@ export function HomePageClient() {
                 </TabsList>
               </div>
 
-              {/* HWPX Example */}
+              {/* HWPX Example — demo content stays hardcoded */}
               <TabsContent value="hwpx">
                 <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr]">
                   {/* Original Korean Document */}
@@ -486,12 +477,11 @@ export function HomePageClient() {
                 </div>
 
                 <p className="mt-4 text-center text-xs text-muted-foreground">
-                  Headers, tables, dates, and document structure are perfectly
-                  preserved in the translated HWPX file.
+                  {t("hwpxTabCaption")}
                 </p>
               </TabsContent>
 
-              {/* DOCX Example */}
+              {/* DOCX Example — demo content stays hardcoded */}
               <TabsContent value="docx">
                 <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr]">
                   {/* Original Korean Document */}
@@ -639,8 +629,7 @@ export function HomePageClient() {
                 </div>
 
                 <p className="mt-4 text-center text-xs text-muted-foreground">
-                  Bold text, numbered sections, bullet lists, and callout boxes are
-                  all preserved in the translated DOCX file.
+                  {t("docxTabCaption")}
                 </p>
               </TabsContent>
             </Tabs>
@@ -667,7 +656,7 @@ export function HomePageClient() {
             variants={fadeInUp}
             transition={{ duration: 0.3 }}
           >
-            Why Xenith?
+            {t("whyXenith")}
           </motion.h2>
           <motion.div
             className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
@@ -676,25 +665,25 @@ export function HomePageClient() {
             viewport={{ once: true, margin: "-50px" }}
             variants={staggerContainer}
           >
-            {features.map((feature) => (
-              <motion.div key={feature.title} variants={fadeInUp} transition={{ duration: 0.3 }}>
+            {featureDefinitions.map((feature) => (
+              <motion.div key={feature.titleKey} variants={fadeInUp} transition={{ duration: 0.3 }}>
                 <Card>
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                         <feature.icon className="size-5" aria-hidden="true" />
                       </div>
-                      {feature.badge && (
+                      {feature.badgeKey && (
                         <Badge variant="default" className="text-xs">
-                          {feature.badge}
+                          {t(feature.badgeKey)}
                         </Badge>
                       )}
                     </div>
-                    <CardTitle className="mt-2">{feature.title}</CardTitle>
+                    <CardTitle className="mt-2">{t(feature.titleKey)}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground">
-                      {feature.description}
+                      {t(feature.descriptionKey)}
                     </p>
                   </CardContent>
                 </Card>
@@ -715,7 +704,7 @@ export function HomePageClient() {
             variants={fadeInUp}
             transition={{ duration: 0.3 }}
           >
-            Conversion Tools
+            {t("conversionTools")}
           </motion.h2>
           <motion.p
             className="mb-8 text-center text-muted-foreground"
@@ -725,7 +714,7 @@ export function HomePageClient() {
             variants={fadeInUp}
             transition={{ duration: 0.3, delay: 0.05 }}
           >
-            Convert between file formats — including HWPX
+            {t("conversionToolsDescription")}
           </motion.p>
           <motion.div
             className="mx-auto grid max-w-4xl gap-3 sm:grid-cols-2 lg:grid-cols-3"
@@ -734,12 +723,12 @@ export function HomePageClient() {
             viewport={{ once: true, margin: "-50px" }}
             variants={staggerContainer}
           >
-            {convertTools.map((tool) => (
+            {convertToolDefinitions.map((tool) => (
               <motion.div key={tool.slug} variants={fadeInUp} transition={{ duration: 0.3 }}>
                 <ConvertCard
                   icon={tool.icon}
-                  title={tool.title}
-                  description={tool.description}
+                  title={t(tool.titleKey)}
+                  description={t(tool.descriptionKey)}
                   slug={tool.slug}
                 />
               </motion.div>
@@ -754,8 +743,7 @@ export function HomePageClient() {
           <div className="flex items-center justify-center gap-2">
             <Shield className="size-5 text-primary" />
             <p className="text-sm font-medium text-muted-foreground">
-              Your files are automatically deleted after processing. We never
-              store your data.
+              {t("trustMessage")}
             </p>
           </div>
         </div>
