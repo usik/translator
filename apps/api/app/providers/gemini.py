@@ -28,13 +28,16 @@ class GeminiProvider:
     ) -> ChatResponse:
         model = model or "gemini-2.5-flash"
         try:
-            response = await self._client.chat.completions.create(
-                model=model,
-                messages=self._format_messages(messages),
-                temperature=options.get("temperature"),
-                max_tokens=options.get("max_tokens"),
-                stream=False,
-            )
+            kwargs: dict = {
+                "model": model,
+                "messages": self._format_messages(messages),
+                "temperature": options.get("temperature"),
+                "max_tokens": options.get("max_tokens"),
+                "stream": False,
+            }
+            if options.get("json_mode"):
+                kwargs["response_format"] = {"type": "json_object"}
+            response = await self._client.chat.completions.create(**kwargs)
         except Exception as e:
             raise LLMError(f"Gemini API error: {e}") from e
 

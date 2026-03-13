@@ -85,6 +85,29 @@ export async function convertFile(
   return res.blob();
 }
 
+export async function processInvoices(
+  files: File[],
+  outputFormat: string = "xlsx"
+): Promise<Blob> {
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append("files", file);
+  }
+  formData.append("output_format", outputFormat);
+
+  const res = await fetch(`${API_URL}/api/v1/invoice/process`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ detail: "Invoice processing failed" }));
+    throw new Error(error.detail || "Invoice processing failed");
+  }
+
+  return res.blob();
+}
+
 // --- TanStack Query Hooks ---
 
 export function useTranslateText() {
@@ -136,6 +159,21 @@ export function useConvertFile() {
     }) => convertFile(file, outputFormat),
     onError: (error: Error) => {
       toast.error(error.message || "Conversion failed. Please try again.");
+    },
+  });
+}
+
+export function useProcessInvoices() {
+  return useMutation({
+    mutationFn: ({
+      files,
+      outputFormat,
+    }: {
+      files: File[];
+      outputFormat: string;
+    }) => processInvoices(files, outputFormat),
+    onError: (error: Error) => {
+      toast.error(error.message || "Invoice processing failed. Please try again.");
     },
   });
 }

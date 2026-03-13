@@ -23,6 +23,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: "/translate" as const, label: t("translate") },
+    { href: "/invoice" as const, label: t("invoice") },
     { href: "/convert" as const, label: t("fileConverter") },
     { href: "/blog" as const, label: t("blog") },
   ];
