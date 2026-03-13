@@ -37,6 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...localeEntry("", "weekly", 1),
     ...localeEntry("/translate", "weekly", 0.9),
     ...localeEntry("/convert", "weekly", 0.9),
+    ...localeEntry("/invoice", "weekly", 0.9),
     ...localeEntry("/privacy", "yearly", 0.3),
     ...localeEntry("/terms", "yearly", 0.3),
   ];

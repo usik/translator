@@ -220,7 +220,7 @@ export function InvoicePageClient() {
           <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex items-center gap-3">
               <label className="text-sm font-medium text-muted-foreground">{t("outputFormat")}</label>
-              <Select value={outputFormat} onValueChange={setOutputFormat}>
+              <Select value={outputFormat} onValueChange={(v) => v && setOutputFormat(v)}>
                 <SelectTrigger className="w-36">
                   <SelectValue />
                 </SelectTrigger>
