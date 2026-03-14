@@ -44,9 +44,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogPages = localeEntry("/blog", "weekly", 0.7);
 
+  const blogPostSlugs = ["invoice-feature", "file-converter"];
+  const blogPostPages = blogPostSlugs.flatMap((slug) =>
+    localeEntry(`/blog/${slug}`, "monthly", 0.6)
+  );
+
   const conversionPages = conversionSlugs.flatMap((slug) =>
     localeEntry(`/convert/${slug}`, "monthly", 0.8)
   );
 
-  return [...staticPages, ...blogPages, ...conversionPages];
+  return [...staticPages, ...blogPages, ...blogPostPages, ...conversionPages];
 }

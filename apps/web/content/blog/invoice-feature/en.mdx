@@ -1,0 +1,241 @@
+---
+title: "Turn Any Foreign Invoice Into a Structured Report — Instantly"
+description: "Upload Korean 세금계산서, Japanese 適格請求書, or Chinese 发票 and get a structured, translated Excel report in seconds. Free, no account needed."
+date: "2026-03-14"
+updated: "2026-03-14"
+author: "Yusik Kim"
+category: "Guide"
+tags: ["invoice", "OCR", "Korean", "Japanese", "Excel"]
+---
+
+> **TL;DR**
+>
+> - Upload Korean 세금계산서, Japanese 適格請求書, or Chinese 增值税发票 in any file format — PDF, image, HWPX, DOCX, or a batch ZIP.
+> - An AI extractor pulls every field (vendor, amounts, tax, line items) and a second AI accountant validates the math and tax rates.
+> - Get a clean Excel or CSV report back in seconds. No account, no sign-up, currently free.
+> - Xenith is the only invoice tool that supports HWPX (Korean 한글) files.
+> - Batch processing: ZIP up a month of invoices and get one consolidated report.
+
+[Try it free at tryxenith.com/invoice ->](https://tryxenith.com/invoice)
+
+---
+
+## The problem no one has solved
+
+If your company does business across Asia, you know the pain. A stack of Korean 세금계산서 arrives from a vendor in Seoul. A Japanese supplier sends 適格請求書 in PDF. A Chinese partner emails 增值税发票 as scanned images.
+
+Now your accounting team needs to get all of that into a spreadsheet. The options are not great.
+
+- **Manual data entry.** Someone stares at characters they cannot read and types numbers one field at a time.
+- **Hire a native speaker.** Companies routinely hire bilingual staff specifically to read foreign receipts.
+- **Use OCR tools that don't understand CJK.** Most invoice OCR tools were built for English documents. They can read characters, but they do not understand the structure of a Korean tax invoice or the required fields of a Japanese qualified invoice.
+
+> **📊 By the numbers:**
+>
+> - Industry average cost: **$15 per invoice** and **14.6 days** of processing time.
+> - **86%** of small and medium businesses still enter invoice data manually.
+> - **39%** of those invoices contain errors.
+> - The AI invoice processing market is projected to reach **$47 billion by 2034**.
+
+> **💬 What real users are saying:**
+>
+> *"We hired a bilingual staff member specifically to read Korean and Japanese receipts. It's a full-time job just during month-end close."*
+> — SAP Concur community forum
+
+For CJK documents specifically, there has been no good answer. Until now.
+
+---
+
+## What Xenith Invoice does
+
+Xenith takes your foreign invoices — in any format, in any language — and returns a clean, structured expense report. Here is what happens under the hood:
+
+**1. OCR extraction.** Your file is read using Mistral's document OCR. This works on PDFs, scanned images (JPG, PNG), HWPX (Korean 한글 format), and DOCX files.
+
+**2. AI field extraction (Extractor Agent).** A specialized AI agent reads the OCR output and extracts every structured field: vendor name (translated and in the original script), invoice number, date, due date, currency, subtotal, tax, total, and every line item with description, quantity, unit price, and amount.
+
+**3. Validation (Accountant Agent).** A second AI agent — acting as a senior CPA — reviews every extracted invoice. It cross-checks the math, verifies tax rates (10% VAT for Korean invoices, 8% or 10% consumption tax for Japanese invoices), detects potential duplicates, and flags anomalies.
+
+**4. Report generation.** The validated data is compiled into an Excel workbook (or CSV) and returned to you as a download.
+
+> **⚡ Key takeaway:** The entire process takes seconds, not days.
+
+---
+
+## How to use it
+
+### Step 1 — Go to tryxenith.com/invoice
+
+No account required. No sign-up. Just open the page.
+
+### Step 2 — Upload your invoice files
+
+Drag and drop files into the upload zone, or click to browse. You can upload:
+
+- **PDF** files (native or scanned)
+- **Images** — JPG, PNG (photographed or scanned invoices)
+- **HWPX** — Korean 한글 documents (Xenith is the only tool that supports this)
+- **DOCX** — Word documents
+- **ZIP** — A zip archive containing multiple invoices of any supported type
+
+Each file can be up to 20 MB. Upload as many files as you need.
+
+### Step 3 — Select your output format
+
+Choose between:
+
+- **Excel (.xlsx)** — Includes an Invoices sheet and a separate Flags sheet highlighting validation issues. Recommended for most users.
+- **CSV (.csv)** — A flat file with one row per invoice. Good for importing into other systems.
+
+### Step 4 — Click "Generate Report"
+
+Xenith processes every file in parallel. You will see a loading indicator while the AI agents work. When processing completes, your report downloads automatically.
+
+---
+
+## What you get in the report
+
+### Invoices sheet
+
+Each row is one invoice with the following columns:
+
+| Column | Description |
+|--------|-------------|
+| **File** | Original filename (e.g., `invoice_march_2026.pdf`) |
+| **Vendor** | Vendor name, translated to English (e.g., "Seoul Tech Solutions") |
+| **Vendor (Original)** | Vendor name in original script (e.g., "서울테크솔루션") |
+| **Invoice #** | Invoice or receipt number |
+| **Date** | Invoice date in ISO format (YYYY-MM-DD) |
+| **Due Date** | Payment due date, if present |
+| **Currency** | 3-letter ISO code (KRW, JPY, USD, EUR, CNY, etc.) |
+| **Subtotal** | Amount before tax |
+| **Tax** | Tax amount |
+| **Total** | Total amount |
+| **Language** | Detected invoice language (ko, ja, zh, en, etc.) |
+| **Confidence** | AI confidence score (0.0 to 1.0) |
+| **Notes** | Accountant agent notes — corrections, concerns, or context |
+
+### Flags sheet (Excel only)
+
+Each row is a validation issue:
+
+| Column | Description |
+|--------|-------------|
+| **Invoice #** | Index of the flagged invoice |
+| **File** | Source filename |
+| **Vendor** | Vendor name |
+| **Type** | `math_error`, `tax_mismatch`, `duplicate`, `anomaly`, or `low_confidence` |
+| **Severity** | `critical` (red), `warning` (yellow), or `info` |
+| **Message** | Human-readable description of the issue |
+
+Critical flags are highlighted in red. Warnings are highlighted in yellow. This gives your accounting team immediate visibility into which invoices need a second look.
+
+> **Ready to see it in action?** Upload your first invoice and get a structured report in seconds — no sign-up required.
+>
+> [Try Xenith Invoice free ->](https://tryxenith.com/invoice)
+
+---
+
+## Supported invoice types and languages
+
+### Invoice types
+
+- **Korean 세금계산서** (Tax Invoice) — Extracts 공급자, 공급받는자, 공급가액, 세액, 합계, 품목, 사업자등록번호, and all line items. Validates 10% VAT rate.
+- **Japanese 適格請求書** (Qualified Invoice) — Extracts 発行者, 取引日, 品名, 数量, 単価, 金額, 消費税, 合計, 登録番号. Validates 8%/10% consumption tax rates.
+- **Chinese 增值税发票** (VAT Invoice) — Extracts 销售方, 购买方, 金额, 税额, 价税合计.
+- **General invoices and receipts** — Any standard invoice or receipt in any language.
+
+### File formats
+
+PDF, JPG, PNG, DOCX, HWPX, and ZIP archives.
+
+> **💡 Only on Xenith:**
+>
+> HWPX support is unique to Xenith. Korean government agencies, legal firms, and businesses commonly use 한글 (HWP/HWPX) for official documents including tax invoices. **No other invoice processing tool can read this format.**
+
+---
+
+## Batch processing
+
+Got a month's worth of invoices from multiple vendors? Put them all in a ZIP file. Xenith unpacks the archive, processes each supported file in parallel, and returns a single consolidated report with every invoice on one sheet.
+
+This is particularly useful for:
+
+- Monthly expense reconciliation across multiple APAC vendors
+- Audit preparation — process an entire quarter's invoices in one batch
+- Travel expense reports with receipts in multiple languages
+
+---
+
+## Privacy and security
+
+> **🛡️ Your data stays yours:**
+>
+> - **No storage.** Files are processed in memory and never written to disk.
+> - **Encrypted transit.** All uploads use TLS encryption.
+> - **Auto-deleted.** Files are purged from memory as soon as your report is generated.
+> - **No account required.** We do not collect your email or any personal information.
+
+---
+
+## Pricing
+
+**Xenith Invoice is currently free.** No account needed. No usage limits beyond rate limiting (10 requests per minute).
+
+We plan to introduce per-invoice pricing in the future — not per-seat subscriptions. When we do, we expect pricing around **$0.50–1.00 per invoice**, which is still a fraction of the $15 industry average for manual processing.
+
+---
+
+## Roadmap
+
+The following features are in active development. Here is what is coming:
+
+| Feature | Status | Target |
+|---------|--------|--------|
+| **QuickBooks and Xero integration** — Push extracted invoices directly into your accounting software as bills | Planned | Q3 2026 |
+| **Korean 세금계산서 compliance validation** — Full NTS requirements, business registration number verification | In development | Q2 2026 |
+| **Japanese 適格請求書 compliance validation** — JCT registration number verification and itemized tax rate validation | In development | Q2 2026 |
+| **Chinese 增值税发票 validation** — VAT type detection and required field checks | Planned | Q3 2026 |
+| **Duplicate detection across batches** — Fuzzy matching across languages and time periods | Planned | Q3 2026 |
+| **Auto-categorization** — GL code prediction based on vendor and line item descriptions | Planned | Q4 2026 |
+| **Email inbox integration** — Forward invoices to a dedicated email address for automatic processing | Planned | Q4 2026 |
+
+Want to influence the roadmap? [Let us know what matters most](mailto:support@tryxenith.com).
+
+---
+
+## Frequently Asked Questions
+
+### What file formats does Xenith Invoice support?
+
+Xenith Invoice supports PDF (native and scanned), JPG, PNG, DOCX, HWPX (Korean 한글 format), and ZIP archives containing any combination of these formats. HWPX support is unique to Xenith — no other invoice tool can read Korean 한글 files.
+
+### Is Xenith Invoice free?
+
+Yes, Xenith Invoice is currently completely free. No account creation or sign-up is required. The only limit is rate limiting at 10 requests per minute. We plan to introduce per-invoice pricing in the future at approximately $0.50–1.00 per invoice.
+
+### How accurate is the AI extraction?
+
+Xenith uses a two-agent system: an Extractor Agent pulls structured fields from the OCR output, and an Accountant Agent validates the math, tax rates, and consistency. Each invoice receives a confidence score (0.0–1.0), and any issues are flagged on a dedicated Flags sheet so your team knows exactly which invoices need review.
+
+### Does Xenith store my invoice files?
+
+No. Files are processed entirely in memory and never written to disk. All uploads use TLS encryption, and files are purged from memory as soon as your report is generated. No account or personal information is required.
+
+### Can I process multiple invoices at once?
+
+Yes. You can upload multiple files individually, or put them all in a ZIP archive. Xenith unpacks the archive, processes every supported file in parallel, and returns a single consolidated Excel or CSV report with all invoices on one sheet.
+
+### What languages are supported?
+
+Xenith supports invoices in any language, with specialized extraction for Korean (세금계산서), Japanese (適格請求書), and Chinese (增值税发票). The AI extractor translates vendor names and field labels to English while preserving the original script in a separate column.
+
+---
+
+## Start processing your invoices today
+
+Stop spending hours on manual data entry for foreign invoices. Xenith turns any CJK invoice into a structured, validated Excel report in seconds.
+
+**No account. No sign-up. Free.**
+
+[**Start processing invoices at tryxenith.com/invoice ->**](https://tryxenith.com/invoice)
