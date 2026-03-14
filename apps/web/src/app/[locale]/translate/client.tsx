@@ -9,6 +9,7 @@ import { TranslatorWidget } from "@/components/translator-widget";
 import { AdSlot } from "@/components/ad-slot";
 import { AD_SLOTS } from "@/lib/ad-config";
 import { useTranslatorStore } from "@/lib/store";
+import { trackBookmarkletCopy } from "@/lib/analytics";
 
 const BOOKMARKLET_CODE = `javascript:void(function(){var t=window.getSelection().toString();if(!t){t=document.body.innerText.substring(0,5000)}window.open('https://tryxenith.com/translate?text='+encodeURIComponent(t),'_blank')})()`;
 
@@ -42,6 +43,7 @@ export function TranslatePageClient() {
       await navigator.clipboard.writeText(BOOKMARKLET_CODE);
       setCopied(true);
       toast.success("Bookmarklet code copied! Create a new bookmark and paste this as the URL.");
+      trackBookmarkletCopy();
       setTimeout(() => setCopied(false), 3000);
     } catch {
       toast.error("Failed to copy.");

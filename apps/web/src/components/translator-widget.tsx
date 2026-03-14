@@ -21,6 +21,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslatorStore } from "@/lib/store";
 import { useTranslateText, useTranslateFile } from "@/lib/api";
 import { getLanguageName } from "@/lib/languages";
+import {
+  trackTextTranslate,
+  trackFileTranslate,
+  trackError,
+  trackTabSwitch,
+  trackFileSelect,
+  trackLangChange,
+  trackLangSwap,
+  trackCopyTranslation,
+  trackFormatPreserveToggle,
+  trackOutputFormatChange,
+} from "@/lib/analytics";
 
 const MAX_CHARS = 5000;
 
@@ -94,6 +106,15 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
           } else {
             setDetectedLanguage(null);
           }
+          trackTextTranslate({
+            source_lang: sourceLang,
+            target_lang: targetLang,
+            char_count: sourceText.length,
+            had_auto_detect: sourceLang === "auto",
+          });
+        },
+        onError: (error: Error) => {
+          trackError("text_translate", { error_message: error.message });
         },
       }
     );
@@ -119,6 +140,20 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
           toast.success("File translated and downloaded successfully!");
+          trackFileTranslate({
+            source_lang: sourceLang,
+            target_lang: targetLang,
+            file_type: selectedFile.name.split(".").pop() || "unknown",
+            file_size_kb: Math.round(selectedFile.size / 1024),
+            output_format: outputFormat,
+            preserve_format: shouldPreserve,
+          });
+        },
+        onError: (error: Error) => {
+          trackError("file_translate", {
+            error_message: error.message,
+            file_type: selectedFile?.name.split(".").pop() || "unknown",
+          });
         },
       }
     );
@@ -135,6 +170,7 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
       await navigator.clipboard.writeText(translatedText);
       setCopied(true);
       toast.success("Copied to clipboard!");
+      trackCopyTranslation({ char_count: translatedText.length });
       setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error("Failed to copy to clipboard.");
@@ -145,7 +181,10 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
     <div className={`w-full ${fullHeight ? "flex-1" : ""}`}>
       <Tabs
         value={activeTab}
-        onValueChange={(val) => setActiveTab(val as "text" | "files")}
+        onValueChange={(val) => {
+          trackTabSwitch({ from_tab: activeTab, to_tab: val });
+          setActiveTab(val as "text" | "files");
+        }}
       >
         <TabsList className="mb-4">
           <TabsTrigger value="text">Text</TabsTrigger>
@@ -159,6 +198,7 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
               <LanguageSelector
                 value={sourceLang}
                 onValueChange={(val) => {
+                  trackLangChange({ field: "source", from_lang: sourceLang, to_lang: val });
                   setSourceLang(val);
                   setDetectedLanguage(null);
                 }}
@@ -174,7 +214,10 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
             <Button
               variant="ghost"
               size="icon"
-              onClick={swapLanguages}
+              onClick={() => {
+                trackLangSwap({ source_lang: sourceLang, target_lang: targetLang });
+                swapLanguages();
+              }}
               disabled={sourceLang === "auto"}
               aria-label="Swap languages"
               className="mb-px shrink-0"
@@ -184,7 +227,10 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
             <div className="flex-1">
               <LanguageSelector
                 value={targetLang}
-                onValueChange={setTargetLang}
+                onValueChange={(val) => {
+                  trackLangChange({ field: "target", from_lang: targetLang, to_lang: val });
+                  setTargetLang(val);
+                }}
                 label="To"
               />
             </div>
@@ -303,7 +349,10 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
             <Button
               variant="ghost"
               size="icon"
-              onClick={swapLanguages}
+              onClick={() => {
+                trackLangSwap({ source_lang: sourceLang, target_lang: targetLang });
+                swapLanguages();
+              }}
               disabled={sourceLang === "auto"}
               aria-label="Swap languages"
               className="mb-px shrink-0"
@@ -321,7 +370,15 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
 
           {/* File dropzone */}
           <FileDropzone
-            onFileSelect={setSelectedFile}
+            onFileSelect={(file) => {
+              setSelectedFile(file);
+              if (file) {
+                trackFileSelect({
+                  file_type: file.name.split(".").pop() || "unknown",
+                  file_size_kb: Math.round(file.size / 1024),
+                });
+              }
+            }}
             selectedFile={selectedFile}
             onClear={() => setSelectedFile(null)}
           />
@@ -332,7 +389,13 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
               <Checkbox
                 id="preserve-format"
                 checked={preserveFormat}
-                onCheckedChange={(checked) => setPreserveFormat(checked === true)}
+                onCheckedChange={(checked) => {
+                  setPreserveFormat(checked === true);
+                  trackFormatPreserveToggle({
+                    enabled: checked === true,
+                    file_type: selectedFile?.name.split(".").pop() || "unknown",
+                  });
+                }}
               />
               <label
                 htmlFor="preserve-format"
@@ -353,7 +416,16 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
               <span className="text-xs font-medium text-muted-foreground">
                 Output Format
               </span>
-              <Select value={outputFormat} onValueChange={(val) => { if (val !== null) setOutputFormat(val); }}>
+              <Select value={outputFormat} onValueChange={(val) => {
+                if (val !== null) {
+                  trackOutputFormatChange({
+                    context: "translate",
+                    from_format: outputFormat,
+                    to_format: val,
+                  });
+                  setOutputFormat(val);
+                }
+              }}>
                 <SelectTrigger className="w-[180px]" aria-label="Output file format">
                   <SelectValue />
                 </SelectTrigger>

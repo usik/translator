@@ -11,6 +11,7 @@ import { FileDropzone } from "@/components/file-dropzone";
 import { useConvertFile } from "@/lib/api";
 import { AdSlot } from "@/components/ad-slot";
 import { AD_SLOTS } from "@/lib/ad-config";
+import { trackFileConvert, trackError, trackFileSelect } from "@/lib/analytics";
 
 interface ConversionConfig {
   title: string;
@@ -130,8 +131,17 @@ export function ConvertSlugClient() {
           setDownloadFilename(filename);
           setStep("download");
           toast.success("File converted successfully!");
+          trackFileConvert({
+            conversion_type: slug,
+            file_type: selectedFile.name.split(".").pop() || "unknown",
+            file_size_kb: Math.round(selectedFile.size / 1024),
+          });
         },
-        onError: () => {
+        onError: (error: Error) => {
+          trackError("file_convert", {
+            error_message: error.message,
+            file_type: selectedFile?.name.split(".").pop() || "unknown",
+          });
           setStep("upload");
         },
       }
@@ -186,7 +196,15 @@ export function ConvertSlugClient() {
           {step === "upload" && (
             <div className="space-y-4">
               <FileDropzone
-                onFileSelect={setSelectedFile}
+                onFileSelect={(file) => {
+                  setSelectedFile(file);
+                  if (file) {
+                    trackFileSelect({
+                      file_type: file.name.split(".").pop() || "unknown",
+                      file_size_kb: Math.round(file.size / 1024),
+                    });
+                  }
+                }}
                 selectedFile={selectedFile}
                 onClear={() => setSelectedFile(null)}
                 accept={config.acceptedFormats}

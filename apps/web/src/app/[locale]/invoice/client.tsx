@@ -39,6 +39,12 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useProcessInvoices } from "@/lib/api";
+import {
+  trackInvoiceProcess,
+  trackError,
+  trackFileSelect,
+  trackOutputFormatChange,
+} from "@/lib/analytics";
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
 const ACCEPTED_TYPES = ".pdf,.png,.jpg,.jpeg,.docx,.hwpx,.zip";
@@ -79,6 +85,12 @@ export function InvoicePageClient() {
       valid.push(file);
     }
     setFiles((prev) => [...prev, ...valid]);
+    for (const file of valid) {
+      trackFileSelect({
+        file_type: file.name.split(".").pop() || "unknown",
+        file_size_kb: Math.round(file.size / 1024),
+      });
+    }
   }, []);
 
   const removeFile = (index: number) => {
@@ -107,6 +119,14 @@ export function InvoicePageClient() {
           a.remove();
           URL.revokeObjectURL(url);
           toast.success("Expense report downloaded!");
+          trackInvoiceProcess({
+            file_count: files.length,
+            output_format: outputFormat,
+            total_size_kb: Math.round(files.reduce((sum, f) => sum + f.size, 0) / 1024),
+          });
+        },
+        onError: (error: Error) => {
+          trackError("invoice_process", { error_message: error.message });
         },
       }
     );
@@ -220,7 +240,16 @@ export function InvoicePageClient() {
           <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex items-center gap-3">
               <label className="text-sm font-medium text-muted-foreground">{t("outputFormat")}</label>
-              <Select value={outputFormat} onValueChange={(v) => v && setOutputFormat(v)}>
+              <Select value={outputFormat} onValueChange={(v) => {
+                if (v) {
+                  trackOutputFormatChange({
+                    context: "invoice",
+                    from_format: outputFormat,
+                    to_format: v,
+                  });
+                  setOutputFormat(v);
+                }
+              }}>
                 <SelectTrigger className="w-36">
                   <SelectValue />
                 </SelectTrigger>
