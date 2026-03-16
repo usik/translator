@@ -18,6 +18,7 @@ dependencies = [
     "structlog>=24.0",
     "slowapi>=0.1.9",
     "openpyxl>=3.1",
+    "olefile>=0.47",
 ]
 
 [project.optional-dependencies]

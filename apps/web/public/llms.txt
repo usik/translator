@@ -1,0 +1,47 @@
+# Xenith
+
+> Xenith is a free online Korean document translation and file conversion platform at tryxenith.com. It is the only online tool that natively supports HWP and HWPX (Korean 한글 word processor) files for translation and conversion while preserving original document formatting. Xenith translates text and documents between 20+ languages with support for PDF, DOCX, HWP, HWPX, and image files.
+
+Xenith's key differentiator is native support for HWP and HWPX files — the standard document formats used by the Korean government, universities, and businesses. No other online translation tool offers format-preserving HWP/HWPX translation. HWP is the legacy binary format and HWPX is the modern XML-based format, both from Hancom's Hangul (한글) word processor.
+
+## Core Features
+- [Text Translation](https://tryxenith.com/translate): Translate text between 20+ languages with AI-powered accuracy
+- [Document Translation](https://tryxenith.com/translate): Translate PDF, DOCX, HWP, and HWPX files while preserving formatting
+- [HWP/HWPX Support](https://tryxenith.com/convert): The only online translator with native Korean Hangul (한글) file support for both legacy HWP and modern HWPX
+- [File Conversion](https://tryxenith.com/convert): Convert between PDF, DOCX, HWP, HWPX, and text formats
+- [Image OCR](https://tryxenith.com/convert/image-to-txt): Extract text from images using AI-powered OCR in 20+ languages
+- [Invoice Processing](https://tryxenith.com/invoice): Extract and translate invoices including Korean 세금계산서 and Japanese 適格請求書
+
+## File Conversion Tools
+- [HWP to PDF](https://tryxenith.com/convert/hwp-to-pdf): Convert legacy Korean HWP documents to PDF
+- [HWP to Text](https://tryxenith.com/convert/hwp-to-txt): Extract text from legacy HWP documents
+- [HWPX to PDF](https://tryxenith.com/convert/hwpx-to-pdf): Convert modern Korean HWPX documents to PDF
+- [HWPX to Text](https://tryxenith.com/convert/hwpx-to-txt): Extract text from modern HWPX documents
+- [PDF to DOCX](https://tryxenith.com/convert/pdf-to-docx): Convert PDF to editable Word format
+- [DOCX to PDF](https://tryxenith.com/convert/docx-to-pdf): Convert Word documents to PDF
+- [Image to Text](https://tryxenith.com/convert/image-to-txt): OCR text extraction from PNG, JPG, WebP, BMP, TIFF
+
+## Supported Languages
+English, Korean (한국어), Japanese (日本語), Chinese (中文), Spanish, French, German, Portuguese, Italian, Russian, Arabic, Hindi, Thai, Vietnamese, Indonesian, Turkish, Polish, Dutch, Swedish, and more.
+
+## Use Cases
+- Korean government documents (공문서): Translate official HWP/HWPX documents for immigration, visa, and legal purposes
+- University documents: Translate Korean academic transcripts, certificates, and diplomas
+- Business translation: Translate Korean business contracts, invoices, and reports
+- Travel in Korea: Translate menus, signs, forms, and receipts via photo/OCR
+- File format conversion: Convert between HWP, HWPX, PDF, DOCX without installing Korean software
+
+## Technical Details
+- Free to use, no account required
+- Files are processed server-side and deleted after translation
+- AI-powered translation using large language models
+- Format-preserving translation maintains headers, tables, and layout for HWPX and DOCX files
+- Built-in HWP5 binary parser — no dependency on Hancom Office
+
+## Blog
+- [Turn Any Foreign Invoice Into a Structured Report](https://tryxenith.com/blog/invoice-feature): Guide to using Xenith's invoice processing feature
+- [The Complete Guide to File Conversion](https://tryxenith.com/blog/file-converter): Overview of Xenith's conversion tools
+
+## Optional
+- [Privacy Policy](https://tryxenith.com/privacy): How Xenith handles data and file deletion
+- [Terms of Service](https://tryxenith.com/terms): Usage terms and conditions

@@ -47,7 +47,7 @@ import {
 } from "@/lib/analytics";
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
-const ACCEPTED_TYPES = ".pdf,.png,.jpg,.jpeg,.docx,.hwpx,.zip";
+const ACCEPTED_TYPES = ".pdf,.png,.jpg,.jpeg,.docx,.hwpx,.hwp,.zip";
 
 function formatFileSize(bytes: number): string {
   if (bytes === 0) return "0 B";

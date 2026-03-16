@@ -17,6 +17,7 @@ from .extractors import ExtractorRegistry
 from .extractors.text import TextExtractor
 from .extractors.docx import BasicDocxExtractor
 from .extractors.hwp import HwpExtractor
+from .extractors.hwp5 import Hwp5Extractor
 
 from .providers import ProviderRegistry
 from .providers.gemini import GeminiProvider
@@ -43,6 +44,7 @@ async def lifespan(app: FastAPI):
     extractor_registry.register(TextExtractor())
     extractor_registry.register(BasicDocxExtractor())
     extractor_registry.register(HwpExtractor())
+    extractor_registry.register(Hwp5Extractor())
 
     # Register OCR-based extractors if Mistral key is set
     if settings.mistral_api_key:

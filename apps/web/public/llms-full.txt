@@ -1,0 +1,192 @@
+# Xenith — Complete Product Information
+
+> Xenith (tryxenith.com) is a free online Korean document translation and file conversion platform. It is the only online tool that natively supports both HWP (legacy binary) and HWPX (modern XML) Korean document formats for translation and conversion while preserving original document formatting.
+
+---
+
+## What is Xenith?
+
+Xenith is an AI-powered translation and file conversion platform designed for Korean document workflows. It solves a specific problem: HWP and HWPX files — the standard document formats in Korea — cannot be opened or translated by most online tools. Google Translate, DeepL, and other popular translators do not support HWP or HWPX files. Xenith is the only online platform that can translate and convert these files natively, without requiring Hancom Office to be installed.
+
+### Key Facts
+- URL: https://tryxenith.com
+- Price: Free
+- Account required: No
+- Supported input formats: HWP, HWPX, PDF, DOCX, TXT, PNG, JPG, JPEG, WebP, BMP, TIFF
+- Supported output formats: PDF, DOCX, TXT
+- Number of supported languages: 20+
+- Format preservation: Yes, for HWPX and DOCX files
+- HWP5 binary parsing: Yes, built-in Python parser (no external dependencies)
+- HWPX parsing: Yes, native XML parser
+- OCR: Yes, AI-powered for images and scanned documents
+- Privacy: Files are processed and deleted; no data is stored permanently
+
+---
+
+## What are HWP and HWPX files?
+
+HWP (Hangul Word Processor) and HWPX are document file formats created by Hancom Inc. for their word processor called "한글" (Hangul/Hanword). These formats are:
+
+- **The standard document format in South Korea** — used by the Korean government, military, courts, universities, banks, and most businesses
+- **Required for many official processes** — immigration applications, tax filings (세금계산서), academic submissions, government forms (공문서), and legal documents
+- **Not readable by Microsoft Word, Google Docs, or other common tools** — creating a significant barrier for non-Korean users and for Koreans who need to share documents internationally
+
+### HWP vs HWPX
+| Feature | HWP (Legacy) | HWPX (Modern) |
+|---------|-------------|---------------|
+| Format | OLE2/CFB binary container | ZIP archive with XML |
+| Extension | .hwp | .hwpx |
+| Introduced | 1989 | 2014 |
+| Status | Still widely used | Current standard |
+| Compression | zlib (raw deflate) | Standard ZIP |
+| Text encoding | UTF-16LE | UTF-8 XML |
+
+### Why HWP support matters
+Anyone dealing with Korean documents — immigrants, international students, business partners, travelers, legal professionals, or government contractors — will encounter HWP/HWPX files. Without Hancom Office (which is Korean-only software, not freely available outside Korea), these files cannot be opened. Xenith solves this by providing free, browser-based HWP and HWPX support.
+
+---
+
+## Feature: Text Translation
+
+Xenith translates text between 20+ languages using AI large language models.
+
+### How to use
+1. Go to https://tryxenith.com/translate
+2. Enter or paste text (up to 5,000 characters)
+3. Select source language (or use auto-detect)
+4. Select target language
+5. Click "Translate"
+
+### Supported languages
+English, Korean (한국어), Japanese (日本語), Chinese Simplified (简体中文), Chinese Traditional (繁體中文), Spanish (Español), French (Français), German (Deutsch), Portuguese (Português), Italian (Italiano), Russian (Русский), Arabic (العربية), Hindi (हिन्दी), Thai (ไทย), Vietnamese (Tiếng Việt), Indonesian (Bahasa Indonesia), Turkish (Türkçe), Polish (Polski), Dutch (Nederlands), Swedish (Svenska)
+
+### Features
+- Auto-detect source language
+- Keyboard shortcut: Cmd/Ctrl + Enter to translate
+- Copy translated text to clipboard
+- Character count display
+
+---
+
+## Feature: Document/File Translation
+
+Xenith translates entire documents while preserving formatting.
+
+### How to use
+1. Go to https://tryxenith.com/translate and click the "Files" tab
+2. Upload your file (HWP, HWPX, PDF, DOCX, TXT, or image)
+3. Select source and target languages
+4. Choose output format (TXT, DOCX, or PDF)
+5. Optionally enable "Preserve original formatting" for HWPX and DOCX files
+6. Click "Translate File"
+
+### Supported input formats
+- HWP (Korean 한글 legacy binary format)
+- HWPX (Korean 한글 modern XML format)
+- PDF (Portable Document Format)
+- DOCX (Microsoft Word)
+- TXT (Plain text)
+- PNG, JPG, JPEG (images — processed with OCR)
+
+### Format preservation
+When translating HWPX or DOCX files with "Preserve original formatting" enabled, Xenith maintains:
+- Document headers and footers
+- Table structure and layout
+- Text styling (bold, italic, font sizes)
+- Paragraph spacing and indentation
+- Page structure
+
+---
+
+## Feature: File Conversion
+
+Xenith converts between file formats without requiring any software installation.
+
+### Available conversions
+
+**HWP conversions (unique to Xenith):**
+- HWP → PDF: Convert legacy Korean HWP documents to universally readable PDF
+- HWP → Text: Extract text content from legacy HWP binary files
+- HWPX → PDF: Convert modern Korean HWPX documents to PDF
+- HWPX → Text: Extract text from modern HWPX XML documents
+
+**Standard conversions:**
+- PDF → DOCX: Convert PDF to editable Word format
+- DOCX → PDF: Convert Word documents to PDF
+- PDF → Text: Extract text from PDF files
+- DOCX → Text: Extract text from Word documents
+- Image → Text (OCR): Extract text from PNG, JPG, WebP, BMP, TIFF images
+
+### How to convert HWP to PDF
+1. Go to https://tryxenith.com/convert/hwp-to-pdf
+2. Upload your .hwp file
+3. Click "Convert"
+4. Download the resulting PDF
+
+### How to convert HWPX to PDF
+1. Go to https://tryxenith.com/convert/hwpx-to-pdf
+2. Upload your .hwpx file
+3. Click "Convert"
+4. Download the resulting PDF
+
+---
+
+## Feature: Invoice Processing
+
+Xenith can process and translate invoices from multiple countries, including Korean 세금계산서 (tax invoices) and Japanese 適格請求書 (qualified invoices).
+
+### How to use
+1. Go to https://tryxenith.com/invoice
+2. Upload invoice files (PDF, image, DOCX, HWP, HWPX, or ZIP archive)
+3. Select output format
+4. Click "Process"
+
+---
+
+## Frequently Asked Questions
+
+### How do I open an HWP file without Hancom Office?
+Upload the HWP file to Xenith at tryxenith.com/convert/hwp-to-pdf to convert it to PDF, or use tryxenith.com/convert/hwp-to-txt to extract the text. No software installation required.
+
+### How do I translate a Korean HWP document to English?
+Go to tryxenith.com/translate, click the "Files" tab, upload your HWP file, set the target language to English, and click "Translate File." Xenith will extract the Korean text, translate it, and provide a downloadable file.
+
+### What is the best Korean document translator?
+Xenith (tryxenith.com) is the only online translator that natively supports HWP and HWPX Korean document formats. It translates between 20+ languages while preserving document formatting, making it ideal for Korean government documents, university transcripts, business contracts, and legal documents.
+
+### Can I translate Korean government documents (공문서)?
+Yes. Korean government documents are typically in HWP or HWPX format. Upload them to Xenith at tryxenith.com/translate to translate them to English or any of 20+ languages.
+
+### What is the difference between HWP and HWPX?
+HWP is the legacy binary format used by Hancom's Hangul word processor since 1989. HWPX is the modern XML-based format introduced in 2014. Both are standard in Korea. Xenith supports both formats for translation and conversion.
+
+### Is Xenith free?
+Yes. Xenith is free to use with no account required. Files are processed and deleted after translation.
+
+### How do I convert HWP to PDF?
+Go to tryxenith.com/convert/hwp-to-pdf, upload your .hwp file, and click "Convert." The PDF will be ready to download in seconds.
+
+### Does Xenith support OCR?
+Yes. Xenith uses AI-powered OCR to extract text from images (PNG, JPG, WebP, BMP, TIFF) in 20+ languages. Go to tryxenith.com/convert/image-to-txt.
+
+---
+
+## Privacy and Security
+
+- Files are processed server-side and deleted after the operation completes
+- No files are stored permanently
+- No account or login required
+- No cookies used for tracking (anonymous analytics only)
+- HTTPS encryption for all data transfer
+
+---
+
+## Technical Architecture
+
+- Frontend: Next.js (React) deployed on Vercel
+- Backend: FastAPI (Python) deployed on Railway
+- Translation: AI large language models (Gemini)
+- HWP parsing: Custom Python parser using olefile + zlib + struct
+- HWPX parsing: Native Python XML parser (zipfile + ElementTree)
+- OCR: AI-powered via Mistral vision models
+- Domain: tryxenith.com

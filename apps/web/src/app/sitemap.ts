@@ -7,6 +7,8 @@ const locales = ["en", "ko", "ja"] as const;
 const conversionSlugs = [
   "hwpx-to-pdf",
   "hwpx-to-txt",
+  "hwp-to-pdf",
+  "hwp-to-txt",
   "pdf-to-docx",
   "docx-to-pdf",
   "pdf-to-txt",

@@ -73,6 +73,22 @@ const conversionConfigs: Record<string, ConversionConfig> = {
     acceptLabel: "HWPX",
     outputFormat: "pdf",
   },
+  "hwp-to-txt": {
+    title: "HWP to Text",
+    description:
+      "Extract text from legacy HWP (한글) binary documents. No Hancom Office required.",
+    acceptedFormats: ".hwp",
+    acceptLabel: "HWP",
+    outputFormat: "txt",
+  },
+  "hwp-to-pdf": {
+    title: "HWP to PDF",
+    description:
+      "Convert legacy HWP (한글) binary documents to universally readable PDF format.",
+    acceptedFormats: ".hwp",
+    acceptLabel: "HWP",
+    outputFormat: "pdf",
+  },
 };
 
 type Step = "upload" | "processing" | "download";

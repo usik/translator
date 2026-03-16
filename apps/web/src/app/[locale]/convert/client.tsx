@@ -48,6 +48,18 @@ const convertTools: ConvertTool[] = [
     slug: "hwpx-to-txt",
   },
   {
+    icon: FileCode,
+    title: "HWP to PDF",
+    description: "Convert legacy 한글 (.hwp) to PDF",
+    slug: "hwp-to-pdf",
+  },
+  {
+    icon: FileCode,
+    title: "HWP to Text",
+    description: "Extract text from legacy 한글 (.hwp)",
+    slug: "hwp-to-txt",
+  },
+  {
     icon: FileOutput,
     title: "PDF to DOCX",
     description: "Convert PDF to editable Word format",
@@ -92,7 +104,7 @@ export function ConvertPageClient() {
           Conversion Tools
         </h1>
         <p className="mt-1 text-muted-foreground">
-          Convert between file formats — including HWPX (한글)
+          Convert between file formats — including HWP &amp; HWPX (한글)
         </p>
       </div>
       <motion.div

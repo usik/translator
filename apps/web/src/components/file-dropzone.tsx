@@ -20,8 +20,8 @@ export function FileDropzone({
   onFileSelect,
   selectedFile,
   onClear,
-  accept = ".pdf,.docx,.txt,.hwpx,.png,.jpg,.jpeg",
-  acceptLabel = "PDF, DOCX, TXT, HWPX, PNG, JPG",
+  accept = ".pdf,.docx,.txt,.hwpx,.hwp,.png,.jpg,.jpeg",
+  acceptLabel = "PDF, DOCX, TXT, HWPX, HWP, PNG, JPG",
 }: FileDropzoneProps) {
   const [isDragging, setIsDragging] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
