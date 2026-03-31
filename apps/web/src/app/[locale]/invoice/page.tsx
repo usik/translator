@@ -54,6 +54,40 @@ export async function generateMetadata({
   };
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tryxenith.com";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Xenith — Invoice Processing",
+  url: `${siteUrl}/invoice`,
+  description:
+    "Upload invoices in any language and get a structured expense report. Supports Korean 세금계산서 (tax invoices), Japanese 適格請求書 (qualified invoices), and standard international invoices.",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    availability: "https://schema.org/InStock",
+  },
+  featureList: [
+    "Korean 세금계산서 (tax invoice) extraction and translation",
+    "Japanese 適格請求書 (qualified invoice) support",
+    "Structured expense report generation",
+    "Multi-language invoice processing",
+    "PDF, image, DOCX, HWP, HWPX input support",
+  ],
+};
+
 export default function InvoicePage() {
-  return <InvoicePageClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <InvoicePageClient />
+    </>
+  );
 }

@@ -54,6 +54,41 @@ export async function generateMetadata({
   };
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tryxenith.com";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Xenith — Translate Text & Files",
+  url: `${siteUrl}/translate`,
+  description:
+    "Translate text and documents (HWP, HWPX, PDF, DOCX, TXT, images) between 20+ languages. The only online tool with native Korean 한글 (HWP/HWPX) document support.",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    availability: "https://schema.org/InStock",
+  },
+  featureList: [
+    "HWP and HWPX Korean document translation",
+    "PDF, DOCX, TXT file translation",
+    "AI-powered OCR for image translation",
+    "Format-preserving translation for HWPX and DOCX",
+    "20+ language support",
+    "Auto-detect source language",
+  ],
+};
+
 export default function TranslatePage() {
-  return <TranslatePageClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <TranslatePageClient />
+    </>
+  );
 }

@@ -54,6 +54,41 @@ export async function generateMetadata({
   };
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tryxenith.com";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Xenith — File Conversion Tools",
+  url: `${siteUrl}/convert`,
+  description:
+    "Convert between HWP, HWPX, PDF, DOCX, and text formats online for free. Extract text from images with AI-powered OCR. The only tool with native Korean 한글 (HWP/HWPX) support.",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    availability: "https://schema.org/InStock",
+  },
+  featureList: [
+    "HWP to PDF conversion (Korean 한글 legacy format)",
+    "HWPX to PDF conversion (Korean 한글 modern format)",
+    "PDF to DOCX conversion",
+    "DOCX to PDF conversion",
+    "Image to text (OCR) in 20+ languages",
+    "No software installation required",
+  ],
+};
+
 export default function ConvertPage() {
-  return <ConvertPageClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ConvertPageClient />
+    </>
+  );
 }

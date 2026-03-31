@@ -737,6 +737,44 @@ export function HomePageClient() {
         </div>
       </section>
 
+      {/* FAQ Section — Q&A content for AI assistant discoverability */}
+      <section className="border-t border-border/40">
+        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
+          <motion.h2
+            className="mb-8 text-center text-2xl font-semibold tracking-tight sm:text-3xl"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={fadeInUp}
+            transition={{ duration: 0.3 }}
+          >
+            {t("faqTitle")}
+          </motion.h2>
+          <dl className="space-y-6">
+            {[
+              { q: t("faq1Q"), a: t("faq1A") },
+              { q: t("faq2Q"), a: t("faq2A") },
+              { q: t("faq3Q"), a: t("faq3A") },
+              { q: t("faq4Q"), a: t("faq4A") },
+              { q: t("faq5Q"), a: t("faq5A") },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                className="rounded-lg border border-border/50 px-5 py-4"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-30px" }}
+                variants={fadeInUp}
+                transition={{ duration: 0.3 }}
+              >
+                <dt className="font-medium">{item.q}</dt>
+                <dd className="mt-1 text-sm text-muted-foreground">{item.a}</dd>
+              </motion.div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
       {/* Trust Message */}
       <section className="border-t border-border/40 bg-muted/30">
         <div className="mx-auto max-w-7xl px-4 py-12 text-center sm:px-6 lg:px-8">

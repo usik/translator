@@ -65,7 +65,18 @@
     "convertPdfToText": "PDF to Text",
     "convertPdfToTextDesc": "Extract text content from PDFs",
     "convertImageToText": "Image to Text",
-    "convertImageToTextDesc": "Extract text from images (OCR)"
+    "convertImageToTextDesc": "Extract text from images (OCR)",
+    "faqTitle": "Frequently Asked Questions",
+    "faq1Q": "How do I open an HWP file without Hancom Office?",
+    "faq1A": "Upload the HWP file to Xenith to convert it to PDF or extract its text. No software installation required — Xenith is the only online tool with native HWP support.",
+    "faq2Q": "How do I translate a Korean HWP document to English?",
+    "faq2A": "Go to the Translate page, click the Files tab, upload your HWP or HWPX file, set the target language to English, and click Translate File.",
+    "faq3Q": "What is the difference between HWP and HWPX?",
+    "faq3A": "HWP is the legacy binary format used by Hancom's Hangul word processor since 1989. HWPX is the modern XML-based format introduced in 2014. Both are standard in Korea for government, academic, and business documents. Xenith supports both.",
+    "faq4Q": "How do I convert HWP to PDF?",
+    "faq4A": "Go to the HWP to PDF converter, upload your .hwp file, and click Convert. The PDF will be ready to download in seconds.",
+    "faq5Q": "Is Xenith free to use?",
+    "faq5A": "Yes. Xenith is free with no account required. Files are processed and deleted after each operation."
   },
   "InvoicePage": {
     "badge": "Now supports Korean & Japanese invoices",
