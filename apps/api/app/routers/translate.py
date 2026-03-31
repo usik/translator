@@ -105,6 +105,7 @@ _OUTPUT_CONTENT_TYPES = {
 @limiter.limit("30/minute")
 async def translate_text(
     request: Request,
+    response: Response,
     req: TranslateTextRequest,
     settings: Settings = Depends(get_settings),
     provider_registry: ProviderRegistry = Depends(get_provider_registry),
@@ -191,7 +192,9 @@ async def translate_text(
             set_session_cookie(resp, new_session)
         return resp
 
-    resp = SuccessResponse(data=TranslateResult(
+    if new_session:
+        set_session_cookie(response, new_session)
+    return SuccessResponse(data=TranslateResult(
         translated_text=translated_text,
         source_language=req.source_language,
         target_language=req.target_language,
@@ -200,15 +203,13 @@ async def translate_text(
         model=chat_response.model,
         metadata=metadata,
     ))
-    if new_session:
-        set_session_cookie(resp, new_session)
-    return resp
 
 
 @router.post("/translate")
 @limiter.limit("20/minute")
 async def translate_file(
     request: Request,
+    response: Response,
     file: UploadFile | None = File(None),
     text: str | None = Form(None),
     source_language: str = Form("auto"),
@@ -359,7 +360,9 @@ async def translate_file(
                     set_session_cookie(resp, new_session)
                 return resp
 
-            resp = SuccessResponse(data=TranslateResult(
+            if new_session:
+                set_session_cookie(response, new_session)
+            return SuccessResponse(data=TranslateResult(
                 translated_text=translated_text,
                 source_language=source_language,
                 target_language=target_language,
@@ -369,9 +372,6 @@ async def translate_file(
                 model="none",
                 metadata=metadata,
             ))
-            if new_session:
-                set_session_cookie(resp, new_session)
-            return resp
 
         # Structured translation: format-preserving
         if (
@@ -546,7 +546,9 @@ async def translate_file(
                 set_session_cookie(resp, new_session)
             return resp
 
-        resp = SuccessResponse(data=TranslateResult(
+        if new_session:
+            set_session_cookie(response, new_session)
+        return SuccessResponse(data=TranslateResult(
             translated_text=translated_text,
             source_language=source_language,
             target_language=target_language,
@@ -556,9 +558,6 @@ async def translate_file(
             model=chat_response.model,
             metadata=metadata,
         ))
-        if new_session:
-            set_session_cookie(resp, new_session)
-        return resp
 
     except HTTPException:
         raise
