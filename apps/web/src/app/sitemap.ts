@@ -7,6 +7,7 @@ const locales = ["en", "ko", "ja"] as const;
 const conversionSlugs = [
   "hwpx-to-pdf",
   "hwpx-to-txt",
+  "hwpx-to-docx",
   "hwp-to-pdf",
   "hwp-to-txt",
   "pdf-to-docx",
@@ -14,6 +15,14 @@ const conversionSlugs = [
   "pdf-to-txt",
   "docx-to-txt",
   "image-to-txt",
+];
+
+const translateSlugs = [
+  "hwpx-to-english",
+  "korean-document",
+  "hwp-translator",
+  "korean-to-english",
+  "korean-to-japanese",
 ];
 
 function localeEntry(
@@ -55,5 +64,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     localeEntry(`/convert/${slug}`, "monthly", 0.8)
   );
 
-  return [...staticPages, ...blogPages, ...blogPostPages, ...conversionPages];
+  const translateSlugPages = translateSlugs.flatMap((slug) =>
+    localeEntry(`/translate/${slug}`, "monthly", 0.85)
+  );
+
+  return [...staticPages, ...blogPages, ...blogPostPages, ...conversionPages, ...translateSlugPages];
 }

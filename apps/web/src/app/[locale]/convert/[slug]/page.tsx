@@ -116,6 +116,20 @@ const seoData: Record<string, Record<string, { title: string; description: strin
       description: "Word（DOCX）文書から無料でテキストを抽出。表、段落、ヘッダー、複雑なレイアウトを正確に処理。",
     },
   },
+  "hwpx-to-docx": {
+    en: {
+      title: "Convert HWPX to DOCX Online - Korean 한글 to Word Converter",
+      description: "Convert HWPX (한글) files to editable Word (DOCX) format online for free. The only tool with native Korean HWPX support. No software required.",
+    },
+    ko: {
+      title: "HWPX를 DOCX로 변환 - 한글 문서 Word 변환기",
+      description: "한글(HWPX) 파일을 Word(DOCX) 형식으로 무료 변환. 소프트웨어 설치 없이 온라인에서 바로 변환. HWPX 파일을 기본 지원하는 유일한 온라인 도구.",
+    },
+    ja: {
+      title: "HWPXをDOCXに変換 - 韓国語한글文書Word変換",
+      description: "HWPX（한글）ファイルを無料でWord（DOCX）形式にオンライン変換。ソフトウェアのインストール不要。HWPXをネイティブサポートする唯一のツール。",
+    },
+  },
   "image-to-txt": {
     en: {
       title: "Image to Text (OCR) Online - Free Image Text Extractor",
@@ -203,6 +217,15 @@ const howToByLocale: Record<string, Record<string, HowToEntry>> = {
         "Download the extracted text file",
       ],
     },
+    "hwpx-to-docx": {
+      name: "How to Convert HWPX to Word (DOCX) Online",
+      steps: [
+        "Go to tryxenith.com/convert/hwpx-to-docx",
+        "Upload your .hwpx (Korean \ud55c\uae00) file by clicking or dragging",
+        "Click the Convert button",
+        "Download the converted Word (DOCX) file",
+      ],
+    },
     "pdf-to-docx": {
       name: "How to Convert PDF to Word (DOCX) Online",
       steps: [
@@ -268,6 +291,15 @@ const howToByLocale: Record<string, Record<string, HowToEntry>> = {
         "추출된 텍스트 파일 다운로드",
       ],
     },
+    "hwpx-to-docx": {
+      name: "HWPX를 Word(DOCX)로 변환하는 방법",
+      steps: [
+        "tryxenith.com/convert/hwpx-to-docx에 접속",
+        ".hwpx(한글) 파일을 클릭하거나 드래그하여 업로드",
+        "변환 버튼 클릭",
+        "변환된 Word(DOCX) 파일 다운로드",
+      ],
+    },
     "pdf-to-docx": {
       name: "PDF를 Word(DOCX)로 변환하는 방법",
       steps: [
@@ -331,6 +363,15 @@ const howToByLocale: Record<string, Record<string, HowToEntry>> = {
         ".hwpx（한글）ファイルをクリックまたはドラッグしてアップロード",
         "変換ボタンをクリック",
         "抽出されたテキストファイルをダウンロード",
+      ],
+    },
+    "hwpx-to-docx": {
+      name: "HWPXをWord（DOCX）に変換する方法",
+      steps: [
+        "tryxenith.com/convert/hwpx-to-docxにアクセス",
+        ".hwpx（한글）ファイルをクリックまたはドラッグしてアップロード",
+        "変換ボタンをクリック",
+        "変換されたWord（DOCX）ファイルをダウンロード",
       ],
     },
     "pdf-to-docx": {

@@ -89,6 +89,14 @@ const conversionConfigs: Record<string, ConversionConfig> = {
     acceptLabel: "HWP",
     outputFormat: "pdf",
   },
+  "hwpx-to-docx": {
+    title: "HWPX to DOCX",
+    description:
+      "Convert Korean HWPX (한글) documents to editable Word (DOCX) format. No Hancom Office required.",
+    acceptedFormats: ".hwpx",
+    acceptLabel: "HWPX",
+    outputFormat: "docx",
+  },
 };
 
 type Step = "upload" | "processing" | "download";
