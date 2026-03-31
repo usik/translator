@@ -24,6 +24,13 @@ class Settings(BaseSettings):
     # API Keys
     gemini_api_key: str = ""
     mistral_api_key: str = ""
+    openai_api_key: str = ""
+
+    # Provider Fallback
+    # Comma-separated ordered list of provider names to try on failure.
+    # E.g. "gemini,openai" tries Gemini first, then OpenAI.
+    fallback_providers: str = "gemini,openai"
+    openai_default_model: str = "gpt-4o-mini"
 
     # Feature Toggles
     enable_whisper: bool = False

@@ -21,6 +21,8 @@ from .extractors.hwp5 import Hwp5Extractor
 
 from .providers import ProviderRegistry
 from .providers.gemini import GeminiProvider
+from .providers.openai import OpenAIProvider
+from .providers.fallback import FallbackProvider
 
 from .converters import ConverterRegistry
 from .converters.text import TextConverter
@@ -66,9 +68,32 @@ async def lifespan(app: FastAPI):
 
     # --- Init Provider Registry ---
     provider_registry = ProviderRegistry()
+
+    # Build individual providers based on available API keys
+    _individual_providers: dict[str, object] = {}
     if settings.gemini_api_key:
-        provider_registry.register(GeminiProvider(settings.gemini_api_key))
+        _individual_providers["gemini"] = GeminiProvider(settings.gemini_api_key)
         log.info("Gemini provider enabled")
+    if settings.openai_api_key:
+        _individual_providers["openai"] = OpenAIProvider(
+            settings.openai_api_key,
+            default_model=settings.openai_default_model,
+        )
+        log.info("OpenAI provider enabled")
+
+    # Build ordered fallback chain from config
+    _fallback_order = [p.strip() for p in settings.fallback_providers.split(",") if p.strip()]
+    _chain = [_individual_providers[name] for name in _fallback_order if name in _individual_providers]
+
+    if len(_chain) > 1:
+        # Register a FallbackProvider that masquerades as the primary
+        primary_name = _chain[0].provider_name
+        provider_registry.register(FallbackProvider(_chain, primary_name=primary_name))
+        log.info("Fallback chain active", order=[p.provider_name for p in _chain])
+    elif len(_chain) == 1:
+        provider_registry.register(_chain[0])
+    else:
+        log.warning("No LLM providers configured — translation will fail")
 
     # --- Init Converter Registry ---
     converter_registry = ConverterRegistry()
