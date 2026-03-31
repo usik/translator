@@ -1,3 +1,4 @@
+import asyncio
 import base64
 import time
 
@@ -7,6 +8,7 @@ from fastapi.responses import Response
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
+from ..auth import verify_api_key
 from ..config import Settings
 from ..dependencies import (
     get_converter_registry,
@@ -17,13 +19,31 @@ from ..dependencies import (
 from ..extractors import ExtractorRegistry
 from ..providers import ProviderRegistry
 from ..converters import ConverterRegistry
-from ..prompts import build_messages, build_segment_messages, parse_translated_segments
-from ..schemas import SuccessResponse, TranslateResult, TranslateTextRequest
+from ..prompts import (
+    build_messages,
+    build_segment_messages,
+    chunk_segments,
+    extract_math,
+    extract_math_from_segments,
+    parse_translated_segments,
+    restore_math,
+    restore_math_in_segments,
+)
+from ..schemas import SuccessResponse, TextSegment, TranslateResult, TranslateTextRequest
+from ..usage import record_translation
 
 log = structlog.get_logger()
 
 router = APIRouter(prefix="/api/v1")
-limiter = Limiter(key_func=get_remote_address)
+
+
+def _rate_limit_key(request: Request) -> str:
+    """Use X-API-Key as rate-limit key when present, else fall back to IP."""
+    key = request.headers.get("X-API-Key")
+    return key if key else get_remote_address(request)
+
+
+limiter = Limiter(key_func=_rate_limit_key)
 
 _OUTPUT_CONTENT_TYPES = {
     "pdf": ("application/pdf", ".pdf"),
@@ -40,6 +60,7 @@ async def translate_text(
     settings: Settings = Depends(get_settings),
     provider_registry: ProviderRegistry = Depends(get_provider_registry),
     converter_registry: ConverterRegistry = Depends(get_converter_registry),
+    api_key: str | None = Depends(verify_api_key),
 ):
     """Translate plain text (JSON body)."""
     provider_name = settings.default_provider
@@ -51,10 +72,11 @@ async def translate_text(
 
     total_start = time.monotonic()
 
-    messages = build_messages(req.text, req.source_language, req.target_language)
+    text_for_llm, math_map = extract_math(req.text)
+    messages = build_messages(text_for_llm, req.source_language, req.target_language)
     chat_response = await provider.chat(messages, model)
 
-    translated_text = chat_response.content
+    translated_text = restore_math(chat_response.content, math_map)
     translation_time_ms = round((time.monotonic() - total_start) * 1000)
 
     log.info(
@@ -62,6 +84,17 @@ async def translate_text(
         input_chars=len(req.text),
         output_chars=len(translated_text),
         elapsed_ms=translation_time_ms,
+    )
+
+    await record_translation(
+        source_language=req.source_language,
+        target_language=req.target_language,
+        source_format=None,
+        output_format=req.output_format,
+        input_chars=len(req.text),
+        duration_ms=translation_time_ms,
+        provider=chat_response.provider,
+        api_key=api_key,
     )
 
     metadata = {
@@ -114,6 +147,7 @@ async def translate_file(
     extractor_registry: ExtractorRegistry = Depends(get_extractor_registry),
     provider_registry: ProviderRegistry = Depends(get_provider_registry),
     converter_registry: ConverterRegistry = Depends(get_converter_registry),
+    api_key: str | None = Depends(verify_api_key),
 ):
     """Translate file or text (multipart form)."""
     if not target_language:
@@ -136,12 +170,14 @@ async def translate_file(
     source_format = None
     extraction_time_ms = None
     extraction_result = None
+    input_chars = len(text) if text else 0
 
     try:
         # Step 1: Extract text from file
         if file is not None:
             extract_start = time.monotonic()
             file_bytes = await file.read()
+            input_chars = len(file_bytes)
 
             # Validate file size
             max_bytes = settings.max_file_size_mb * 1024 * 1024
@@ -265,21 +301,47 @@ async def translate_file(
             if provider is None:
                 raise HTTPException(status_code=500, detail=f"Provider '{provider_name}' not available")
 
-            messages = build_segment_messages(
-                extraction_result.segments, source_language, target_language,
-            )
+            chunks = chunk_segments(extraction_result.segments)
+            log.info("translate.structured_chunks", chunks=len(chunks),
+                     segments=len(extraction_result.segments))
+
+            sem = asyncio.Semaphore(3)
+
+            async def _translate_chunk(chunk: list[TextSegment]) -> list[TextSegment]:
+                async with sem:
+                    stripped_chunk, math_maps = extract_math_from_segments(chunk)
+                    messages = build_segment_messages(
+                        stripped_chunk, source_language, target_language,
+                    )
+                    chat_response = await provider.chat(messages, model)
+                    translated = parse_translated_segments(
+                        chat_response.content, stripped_chunk,
+                    )
+                    return restore_math_in_segments(translated, math_maps)
+
             translate_start = time.monotonic()
-            chat_response = await provider.chat(messages, model)
+            chunk_results = await asyncio.gather(
+                *[_translate_chunk(chunk) for chunk in chunks]
+            )
+            all_translated: list[TextSegment] = []
+            for result in chunk_results:
+                all_translated.extend(result)
             translation_time_ms = round((time.monotonic() - translate_start) * 1000)
 
-            translated_segments = parse_translated_segments(
-                chat_response.content, extraction_result.segments,
-            )
+            # Merge translated chunks back with any skipped segments (images etc.)
+            translated_by_id = {s.id: s for s in all_translated}
+            translated_segments = [
+                translated_by_id.get(seg.id, seg)
+                for seg in extraction_result.segments
+            ]
 
             converter = converter_registry.get(extraction_result.source_format)
             if converter and hasattr(converter, "convert_structured"):
                 source_bytes = base64.b64decode(extraction_result.source_file_b64)
-                patched_bytes = await converter.convert_structured(source_bytes, translated_segments)
+                patched_bytes = await converter.convert_structured(
+                    source_bytes, translated_segments,
+                    metadata=extraction_result.metadata,
+                )
 
                 # Cross-format: DOCX source → PDF output
                 if output_format == "pdf" and extraction_result.source_format == "docx":
@@ -304,10 +366,11 @@ async def translate_file(
         if provider is None:
             raise HTTPException(status_code=500, detail=f"Provider '{provider_name}' not available")
 
-        messages = build_messages(text, source_language, target_language)
+        text_for_llm, math_map = extract_math(text)
+        messages = build_messages(text_for_llm, source_language, target_language)
         translate_start = time.monotonic()
         chat_response = await provider.chat(messages, model)
-        translated_text = chat_response.content
+        translated_text = restore_math(chat_response.content, math_map)
         translation_time_ms = round((time.monotonic() - translate_start) * 1000)
 
         log.info(
@@ -315,6 +378,17 @@ async def translate_file(
             input_chars=len(text),
             output_chars=len(translated_text),
             elapsed_ms=translation_time_ms,
+        )
+
+        await record_translation(
+            source_language=source_language,
+            target_language=target_language,
+            source_format=source_format,
+            output_format=output_format,
+            input_chars=input_chars,
+            duration_ms=translation_time_ms,
+            provider=chat_response.provider,
+            api_key=api_key,
         )
 
         total_time_ms = round((time.monotonic() - total_start) * 1000)

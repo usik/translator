@@ -31,7 +31,7 @@ from .converters.docx import DocxConverter
 from .converters.docx_to_pdf import DocxToPdfConverter
 from .converters.hwpx import HwpxConverter
 
-from .routers import health, translate, convert, formats, invoice
+from .routers import health, translate, convert, formats, invoice, stats
 
 log = structlog.get_logger()
 
@@ -165,6 +165,7 @@ def create_app() -> FastAPI:
     app.include_router(convert.router)
     app.include_router(formats.router)
     app.include_router(invoice.router)
+    app.include_router(stats.router)
 
     return app
 

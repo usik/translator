@@ -45,6 +45,9 @@ class Settings(BaseSettings):
     # CORS
     cors_origins: str = "http://localhost:3000"
 
+    # API Key Auth (comma-separated list of valid keys; empty = open access)
+    api_keys: str = ""
+
     # Rate Limiting
     rate_limit_per_minute: int = 30
 
