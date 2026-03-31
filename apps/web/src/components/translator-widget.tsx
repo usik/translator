@@ -36,7 +36,7 @@ import {
 
 const MAX_CHARS = 5000;
 
-const FORMAT_PRESERVE_EXTENSIONS = [".hwpx", ".docx"];
+const FORMAT_PRESERVE_EXTENSIONS = [".hwpx", ".docx", ".pdf"];
 
 const outputFormats = [
   { value: "txt", label: "Text (.txt)" },
