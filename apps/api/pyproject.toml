@@ -19,10 +19,16 @@ dependencies = [
     "slowapi>=0.1.9",
     "openpyxl>=3.1",
     "olefile>=0.47",
+    "latex2mathml>=3.77",
 ]
 
 [project.optional-dependencies]
 whisper = ["faster-whisper>=1.1"]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.24"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
 
 [tool.hatch.build.targets.wheel]
 packages = ["app"]
