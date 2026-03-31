@@ -25,6 +25,7 @@ export function Navbar() {
     { href: "/translate" as const, label: t("translate") },
     { href: "/invoice" as const, label: t("invoice") },
     { href: "/convert" as const, label: t("fileConverter") },
+    { href: "/pricing" as const, label: t("pricing") },
     { href: "/blog" as const, label: t("blog") },
   ];
 
