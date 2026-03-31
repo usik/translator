@@ -53,3 +53,10 @@ class Settings(BaseSettings):
 
     # File Size
     max_file_size_mb: int = 20
+
+    # Polar billing
+    polar_access_token: str = ""
+    polar_organization_id: str = ""
+    # Set to True to enforce credit checks before processing (fail closed).
+    # When False, events are still ingested but users are never blocked.
+    polar_billing_enabled: bool = False

@@ -4,11 +4,12 @@ import time
 
 import structlog
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
 from ..auth import verify_api_key
+from ..billing import check_credits, estimate_pages, ingest_document_event
 from ..config import Settings
 from ..dependencies import (
     get_converter_registry,
@@ -17,6 +18,12 @@ from ..dependencies import (
     get_settings,
 )
 from ..extractors import ExtractorRegistry
+from ..free_tier import (
+    COOKIE_NAME,
+    check_and_increment,
+    get_session_from_request,
+    set_session_cookie,
+)
 from ..providers import ProviderRegistry
 from ..converters import ConverterRegistry
 from ..prompts import (
@@ -45,6 +52,48 @@ def _rate_limit_key(request: Request) -> str:
 
 limiter = Limiter(key_func=_rate_limit_key)
 
+
+async def _check_access(
+    request: Request,
+    settings: Settings,
+    api_key: str | None,
+) -> str | None:
+    """Gate access via free-tier limit (unauthenticated) or Polar credits (authenticated).
+
+    Returns a new session ID string if one was created (caller must set the cookie),
+    or None when no new session is needed.
+
+    Raises HTTPException(402) when the caller is not allowed to proceed.
+    """
+    if api_key:
+        # Authenticated — check Polar credit balance
+        allowed, reason = await check_credits(settings=settings, external_customer_id=api_key)
+        if not allowed:
+            raise HTTPException(
+                status_code=402,
+                detail={
+                    "code": "INSUFFICIENT_CREDITS",
+                    "message": "No credits or active subscription. Please purchase credits at tryxenith.com.",
+                },
+            )
+        return None
+
+    # Unauthenticated — free tier (3 docs/day per IP+cookie)
+    ip = get_remote_address(request)
+    session = get_session_from_request(request)
+    allowed, remaining, new_session = await check_and_increment(ip, session)
+    if not allowed:
+        raise HTTPException(
+            status_code=429,
+            detail={
+                "code": "FREE_TIER_LIMIT",
+                "message": "Free tier limit reached (3 documents/day). Sign up for more at tryxenith.com.",
+                "remaining": 0,
+            },
+        )
+    return new_session
+
+
 _OUTPUT_CONTENT_TYPES = {
     "pdf": ("application/pdf", ".pdf"),
     "docx": ("application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".docx"),
@@ -63,6 +112,8 @@ async def translate_text(
     api_key: str | None = Depends(verify_api_key),
 ):
     """Translate plain text (JSON body)."""
+    new_session = await _check_access(request, settings, api_key)
+
     provider_name = settings.default_provider
     model = settings.default_model
 
@@ -97,6 +148,21 @@ async def translate_text(
         api_key=api_key,
     )
 
+    # Ingest billing event for authenticated users (fire-and-forget)
+    if api_key:
+        asyncio.create_task(
+            ingest_document_event(
+                settings=settings,
+                external_customer_id=api_key,
+                operation="translate",
+                fmt="text",
+                pages=estimate_pages(req.text),
+                source_language=req.source_language,
+                target_language=req.target_language,
+                file_size_kb=len(req.text.encode()) // 1024,
+            )
+        )
+
     metadata = {
         "input_chars": len(req.text),
         "output_chars": len(translated_text),
@@ -116,13 +182,16 @@ async def translate_text(
         content_type = ct_info[0] if ct_info else "application/octet-stream"
         ext = ct_info[1] if ct_info else f".{req.output_format}"
 
-        return Response(
+        resp = Response(
             content=file_bytes,
             media_type=content_type,
             headers={"Content-Disposition": f'attachment; filename="translated_output{ext}"'},
         )
+        if new_session:
+            set_session_cookie(resp, new_session)
+        return resp
 
-    return SuccessResponse(data=TranslateResult(
+    resp = SuccessResponse(data=TranslateResult(
         translated_text=translated_text,
         source_language=req.source_language,
         target_language=req.target_language,
@@ -131,6 +200,9 @@ async def translate_text(
         model=chat_response.model,
         metadata=metadata,
     ))
+    if new_session:
+        set_session_cookie(resp, new_session)
+    return resp
 
 
 @router.post("/translate")
@@ -165,6 +237,8 @@ async def translate_file(
             status_code=400,
             detail={"code": "MISSING_INPUT", "message": "Either 'file' or 'text' must be provided."},
         )
+
+    new_session = await _check_access(request, settings, api_key)
 
     total_start = time.monotonic()
     source_format = None
@@ -245,11 +319,14 @@ async def translate_file(
                     content_type = ct_info[0] if ct_info else "application/octet-stream"
                     ext = ct_info[1] if ct_info else f".{extraction_result.source_format}"
 
-                    return Response(
+                    resp = Response(
                         content=patched_bytes,
                         media_type=content_type,
                         headers={"Content-Disposition": f'attachment; filename="translated_output{ext}"'},
                     )
+                    if new_session:
+                        set_session_cookie(resp, new_session)
+                    return resp
 
             translated_text = text
             total_time_ms = round((time.monotonic() - total_start) * 1000)
@@ -273,13 +350,16 @@ async def translate_file(
                 content_type = ct_info[0] if ct_info else "application/octet-stream"
                 ext = ct_info[1] if ct_info else f".{output_format}"
 
-                return Response(
+                resp = Response(
                     content=out_bytes,
                     media_type=content_type,
                     headers={"Content-Disposition": f'attachment; filename="translated_output{ext}"'},
                 )
+                if new_session:
+                    set_session_cookie(resp, new_session)
+                return resp
 
-            return SuccessResponse(data=TranslateResult(
+            resp = SuccessResponse(data=TranslateResult(
                 translated_text=translated_text,
                 source_language=source_language,
                 target_language=target_language,
@@ -289,6 +369,9 @@ async def translate_file(
                 model="none",
                 metadata=metadata,
             ))
+            if new_session:
+                set_session_cookie(resp, new_session)
+            return resp
 
         # Structured translation: format-preserving
         if (
@@ -355,11 +438,29 @@ async def translate_file(
                     content_type = ct_info[0] if ct_info else "application/octet-stream"
                     ext = ct_info[1] if ct_info else f".{extraction_result.source_format}"
 
-                return Response(
+                # Ingest billing event for authenticated users (fire-and-forget)
+                if api_key:
+                    asyncio.create_task(
+                        ingest_document_event(
+                            settings=settings,
+                            external_customer_id=api_key,
+                            operation="translate",
+                            fmt=source_format or "unknown",
+                            pages=len(extraction_result.segments) if extraction_result and extraction_result.segments else 1,
+                            source_language=source_language,
+                            target_language=target_language,
+                            file_size_kb=input_chars // 1024,
+                        )
+                    )
+
+                resp = Response(
                     content=patched_bytes,
                     media_type=content_type,
                     headers={"Content-Disposition": f'attachment; filename="translated_output{ext}"'},
                 )
+                if new_session:
+                    set_session_cookie(resp, new_session)
+                return resp
 
         # Step 2: Translate via LLM
         provider = provider_registry.get(provider_name)
@@ -391,6 +492,21 @@ async def translate_file(
             api_key=api_key,
         )
 
+        # Ingest billing event for authenticated users (fire-and-forget)
+        if api_key:
+            asyncio.create_task(
+                ingest_document_event(
+                    settings=settings,
+                    external_customer_id=api_key,
+                    operation="translate",
+                    fmt=source_format or "text",
+                    pages=estimate_pages(text),
+                    source_language=source_language,
+                    target_language=target_language,
+                    file_size_kb=input_chars // 1024,
+                )
+            )
+
         total_time_ms = round((time.monotonic() - total_start) * 1000)
         metadata = {
             "input_chars": len(text),
@@ -421,13 +537,16 @@ async def translate_file(
             content_type = ct_info[0] if ct_info else "application/octet-stream"
             ext = ct_info[1] if ct_info else f".{output_format}"
 
-            return Response(
+            resp = Response(
                 content=out_bytes,
                 media_type=content_type,
                 headers={"Content-Disposition": f'attachment; filename="translated_output{ext}"'},
             )
+            if new_session:
+                set_session_cookie(resp, new_session)
+            return resp
 
-        return SuccessResponse(data=TranslateResult(
+        resp = SuccessResponse(data=TranslateResult(
             translated_text=translated_text,
             source_language=source_language,
             target_language=target_language,
@@ -437,6 +556,9 @@ async def translate_file(
             model=chat_response.model,
             metadata=metadata,
         ))
+        if new_session:
+            set_session_cookie(resp, new_session)
+        return resp
 
     except HTTPException:
         raise

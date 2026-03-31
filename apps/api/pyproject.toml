@@ -20,6 +20,7 @@ dependencies = [
     "openpyxl>=3.1",
     "olefile>=0.47",
     "latex2mathml>=3.77",
+    "polar-sdk>=0.9",
 ]
 
 [project.optional-dependencies]
