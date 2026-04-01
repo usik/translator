@@ -176,6 +176,10 @@ export async function generateMetadata({
         ja: `${siteUrl}/ja`,
       },
     },
+    themeColor: [
+      { media: "(prefers-color-scheme: light)", color: "#4361EE" },
+      { media: "(prefers-color-scheme: dark)", color: "#4361EE" },
+    ],
   };
 }
 
