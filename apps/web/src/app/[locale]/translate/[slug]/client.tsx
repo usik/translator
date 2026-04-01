@@ -9,8 +9,10 @@ import { TranslatorWidget } from "@/components/translator-widget";
 import { AdSlot } from "@/components/ad-slot";
 import { AD_SLOTS } from "@/lib/ad-config";
 import { useTranslatorStore } from "@/lib/store";
+import { translateSlugs } from "@/data/translate-slugs";
 
-// ── Page-level metadata (mirrors page.tsx data for client rendering) ──────────
+// ── Legacy inline configs kept for reference; replaced by translateSlugs ─────
+// All slug data is now driven from @/data/translate-slugs.ts
 
 type SlugConfig = {
   h1: string;
@@ -236,7 +238,19 @@ export function TranslateSlugClient() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
-  const config = slugConfigs[slug];
+
+  // Prefer shared data file; fall back to legacy inline configs
+  const sharedData = translateSlugs[slug];
+  const config: SlugConfig | undefined = sharedData
+    ? {
+        h1: sharedData.seo.en.h1,
+        subheading: sharedData.seo.en.subheading,
+        sourceLang: sharedData.sourceLang,
+        targetLang: sharedData.targetLang,
+        relatedLinks: sharedData.relatedLinks,
+        faqs: sharedData.faqs,
+      }
+    : slugConfigs[slug];
 
   const setSourceLang = useTranslatorStore((s) => s.setSourceLang);
   const setTargetLang = useTranslatorStore((s) => s.setTargetLang);
@@ -246,18 +260,9 @@ export function TranslateSlugClient() {
     if (config) {
       setSourceLang(config.sourceLang);
       setTargetLang(config.targetLang);
-      // File-focused slugs default to files tab
-      if (
-        slug === "hwpx-to-english" ||
-        slug === "korean-document" ||
-        slug === "hwp-translator"
-      ) {
-        setActiveTab("files");
-      } else {
-        setActiveTab("text");
-      }
+      setActiveTab(sharedData?.filesFocused ? "files" : "text");
     }
-  }, [slug, config, setSourceLang, setTargetLang, setActiveTab]);
+  }, [slug, config, sharedData, setSourceLang, setTargetLang, setActiveTab]);
 
   if (!config) {
     return (

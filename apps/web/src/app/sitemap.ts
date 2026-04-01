@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getAllSlugs } from "@/data/translate-slugs";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tryxenith.com";
 
@@ -17,13 +18,7 @@ const conversionSlugs = [
   "image-to-txt",
 ];
 
-const translateSlugs = [
-  "hwpx-to-english",
-  "korean-document",
-  "hwp-translator",
-  "korean-to-english",
-  "korean-to-japanese",
-];
+const translateSlugs = getAllSlugs();
 
 function localeEntry(
   path: string,
