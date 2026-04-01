@@ -136,6 +136,23 @@ ol { list-style-type: decimal; }
 img { max-width: 100%; height: auto; margin: 0.5em 0; }
 """
 
+_FOOTER_CSS = """\
+.xenith-footer {
+    position: fixed;
+    bottom: 0.4cm;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 7pt;
+    color: #bbb;
+    border-top: 0.5pt solid #e8e8e8;
+    padding-top: 3pt;
+    font-family: sans-serif;
+}
+"""
+
+_FOOTER_HTML = '<div class="xenith-footer">Translated by Xenith · tryxenith.com</div>'
+
 _STRUCTURED_HTML = """\
 <!DOCTYPE html>
 <html>
@@ -167,17 +184,21 @@ class PDFConverter:
 
         return _HTML_TEMPLATE.format(header=header_html, body=body_html)
 
-    def _generate_sync(self, text: str, **options) -> bytes:
+    def _generate_sync(self, text: str, add_branding: bool = False, **options) -> bytes:
         import weasyprint
         full_html = self._build_html(text)
-        css = weasyprint.CSS(string=_CSS_TEMPLATE)
+        css_string = _CSS_TEMPLATE
+        if add_branding:
+            css_string += _FOOTER_CSS
+            full_html = full_html.replace("</body>", f"{_FOOTER_HTML}</body>")
+        css = weasyprint.CSS(string=css_string)
         pdf_bytes = weasyprint.HTML(string=full_html).write_pdf(stylesheets=[css])
-        log.info("pdf.generated", size=len(pdf_bytes))
+        log.info("pdf.generated", size=len(pdf_bytes), branded=add_branding)
         return pdf_bytes
 
-    async def convert(self, text: str, **options) -> bytes:
+    async def convert(self, text: str, add_branding: bool = False, **options) -> bytes:
         try:
-            return await asyncio.to_thread(self._generate_sync, text, **options)
+            return await asyncio.to_thread(self._generate_sync, text, add_branding=add_branding, **options)
         except Exception as e:
             raise OutputError(f"PDF generation failed: {e}") from e
 
@@ -196,6 +217,7 @@ class PDFConverter:
     def _convert_structured_sync(
         self, source_file: bytes, segments: list,
         metadata: dict | None = None,
+        add_branding: bool = False,
     ) -> bytes:
         import weasyprint
 
@@ -220,21 +242,27 @@ class PDFConverter:
         if images:
             html_content = self._inject_images(html_content, images)
 
+        css_string = _STRUCTURED_CSS
+        if add_branding:
+            css_string += _FOOTER_CSS
+            html_content += _FOOTER_HTML
+
         full_html = _STRUCTURED_HTML.format(content=html_content)
-        css = weasyprint.CSS(string=_STRUCTURED_CSS)
+        css = weasyprint.CSS(string=css_string)
         pdf_bytes = weasyprint.HTML(string=full_html).write_pdf(stylesheets=[css])
         log.info("pdf.structured_generated", size=len(pdf_bytes),
-                 images=len(images))
+                 images=len(images), branded=add_branding)
         return pdf_bytes
 
     async def convert_structured(
         self, source_file: bytes, segments: list,
         metadata: dict | None = None,
+        add_branding: bool = False,
     ) -> bytes:
         try:
             return await asyncio.to_thread(
                 self._convert_structured_sync, source_file, segments,
-                metadata,
+                metadata, add_branding,
             )
         except Exception as e:
             raise OutputError(f"PDF structured conversion failed: {e}") from e

@@ -114,6 +114,7 @@ async def translate_text(
 ):
     """Translate plain text (JSON body)."""
     new_session = await _check_access(request, settings, api_key)
+    add_branding = api_key is None  # free tier gets branded footer
 
     provider_name = settings.default_provider
     model = settings.default_model
@@ -178,7 +179,7 @@ async def translate_text(
         if converter is None:
             raise HTTPException(status_code=400, detail=f"Unsupported output format: {req.output_format}")
 
-        file_bytes = await converter.convert(translated_text)
+        file_bytes = await converter.convert(translated_text, add_branding=add_branding)
         ct_info = _OUTPUT_CONTENT_TYPES.get(req.output_format)
         content_type = ct_info[0] if ct_info else "application/octet-stream"
         ext = ct_info[1] if ct_info else f".{req.output_format}"
@@ -240,6 +241,7 @@ async def translate_file(
         )
 
     new_session = await _check_access(request, settings, api_key)
+    add_branding = api_key is None  # free tier gets branded footer
 
     total_start = time.monotonic()
     source_format = None
@@ -314,7 +316,7 @@ async def translate_file(
                 converter = converter_registry.get(extraction_result.source_format)
                 if converter and hasattr(converter, "convert_structured"):
                     source_bytes = base64.b64decode(extraction_result.source_file_b64)
-                    patched_bytes = await converter.convert_structured(source_bytes, extraction_result.segments)
+                    patched_bytes = await converter.convert_structured(source_bytes, extraction_result.segments, add_branding=add_branding)
 
                     ct_info = _OUTPUT_CONTENT_TYPES.get(extraction_result.source_format)
                     content_type = ct_info[0] if ct_info else "application/octet-stream"
@@ -424,6 +426,7 @@ async def translate_file(
                 patched_bytes = await converter.convert_structured(
                     source_bytes, translated_segments,
                     metadata=extraction_result.metadata,
+                    add_branding=add_branding,
                 )
 
                 # Cross-format: DOCX source → PDF output
@@ -529,7 +532,7 @@ async def translate_file(
             if converter is None:
                 raise HTTPException(status_code=400, detail=f"Unsupported output format: {output_format}")
 
-            out_bytes = await converter.convert(translated_text)
+            out_bytes = await converter.convert(translated_text, add_branding=add_branding)
             convert_time_ms = round((time.monotonic() - total_start) * 1000) - translation_time_ms
             metadata["conversion_time_ms"] = convert_time_ms
 
