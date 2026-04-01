@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
+  <rect width="180" height="180" rx="40" fill="#4361EE"/>
+  <!-- Arrow 1: from top-left to bottom-right -->
+  <line x1="45" y1="45" x2="124" y2="124" stroke="white" stroke-width="14" stroke-linecap="round"/>
+  <path d="M101 124 L124 124 L124 101" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Arrow 2: from bottom-left to top-right -->
+  <line x1="45" y1="135" x2="124" y2="56" stroke="white" stroke-width="14" stroke-linecap="round"/>
+  <path d="M124 79 L124 56 L101 56" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
