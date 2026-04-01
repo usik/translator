@@ -5,6 +5,21 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Xenith brand color scale — use as bg-brand-*, text-brand-*, border-brand-*, etc. */
+  --color-brand-50:      var(--brand-50);
+  --color-brand-100:     var(--brand-100);
+  --color-brand-200:     var(--brand-200);
+  --color-brand-300:     var(--brand-300);
+  --color-brand-400:     var(--brand-400);
+  --color-brand-500:     var(--brand-500);
+  --color-brand-600:     var(--brand-600);
+  --color-brand-700:     var(--brand-700);
+  --color-brand-800:     var(--brand-800);
+  --color-brand-900:     var(--brand-900);
+  --color-brand-success: var(--brand-success);
+  --color-brand-warning: var(--brand-warning);
+  --color-brand-error:   var(--brand-error);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -48,6 +63,22 @@
 }
 
 :root {
+  /* Xenith brand color palette (blue-indigo) */
+  --brand-50:      #F0F1FF;
+  --brand-100:     #E0E3FF;
+  --brand-200:     #BBC1FA;
+  --brand-300:     #8D99F3;
+  --brand-400:     #6677EF;
+  --brand-500:     #4361EE;
+  --brand-600:     #3450D5;
+  --brand-700:     #2A3FB8;
+  --brand-800:     #203090;
+  --brand-900:     #172268;
+  /* Semantic brand colors */
+  --brand-success: #22C55E;
+  --brand-warning: #F59E0B;
+  --brand-error:   #EF4444;
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
