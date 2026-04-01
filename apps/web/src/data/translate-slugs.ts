@@ -718,6 +718,182 @@ export const translateSlugs: Record<string, TranslateSlugData> = {
     ],
   },
 
+  // ── Programmatic: Spanish & Portuguese (large populations) ──────────────
+
+  "korean-to-spanish": {
+    seo: {
+      en: {
+        title: "Korean to Spanish Translation Online - Text & Documents | Xenith",
+        description:
+          "Translate Korean to Spanish online for free. Supports HWP, HWPX, PDF, DOCX, and plain text. AI translation with format preservation. For business, immigration, and personal documents.",
+        h1: "Korean to Spanish Translation",
+        subheading:
+          "Translate Korean text and documents to Spanish — HWP, HWPX, PDF, DOCX, and plain text supported.",
+      },
+    },
+    sourceLang: "ko",
+    targetLang: "es",
+    filesFocused: false,
+    relatedLinks: [
+      { href: "/translate/korean-to-english", label: "Korean to English" },
+      { href: "/translate/korean-to-portuguese", label: "Korean to Portuguese" },
+      { href: "/translate/korean-document", label: "Korean Document Translation" },
+      { href: "/translate/translate-korean-contract", label: "Korean Contract Translation" },
+    ],
+    faqs: [
+      {
+        q: "How do I translate Korean documents to Spanish?",
+        a: "Upload your Korean document (HWP, HWPX, PDF, or DOCX) to Xenith at tryxenith.com. Select Spanish as the target language. Xenith translates the content and preserves your document's original layout and formatting.",
+      },
+      {
+        q: "Can I translate HWP or HWPX files to Spanish?",
+        a: "Yes. Xenith is the only online translator that can open HWP and HWPX (Hancom 한글) files and translate them to Spanish without Hancom Office installed.",
+      },
+      {
+        q: "Is Korean to Spanish translation free?",
+        a: "Yes. Xenith offers free Korean to Spanish translation for text and documents.",
+      },
+      {
+        q: "Can I translate Korean business contracts to Spanish?",
+        a: "Yes. Upload your Korean contract (PDF or HWPX) and select Spanish. Xenith preserves clause numbering, tables, and formal document structure.",
+      },
+      {
+        q: "Does Xenith support Latin American Spanish?",
+        a: "Yes. Xenith translates Korean into standard Spanish suitable for both Spain and Latin America. For region-specific terminology, specify your preference in the translation request.",
+      },
+      {
+        q: "Can I translate Korean immigration documents to Spanish?",
+        a: "Yes. Upload Korean residency documents, certificates, or family documents as PDF or HWPX and download a Spanish translation with the original form layout preserved.",
+      },
+    ],
+  },
+
+  "korean-to-portuguese": {
+    seo: {
+      en: {
+        title: "Korean to Portuguese Translation Online - Text & Documents | Xenith",
+        description:
+          "Translate Korean to Portuguese online for free. Supports HWP, HWPX, PDF, DOCX, and plain text. AI translation with format preservation. For Brazil and Portugal.",
+        h1: "Korean to Portuguese Translation",
+        subheading:
+          "Translate Korean text and documents to Portuguese — HWP, HWPX, PDF, DOCX, and plain text supported.",
+      },
+    },
+    sourceLang: "ko",
+    targetLang: "pt",
+    filesFocused: false,
+    relatedLinks: [
+      { href: "/translate/korean-to-english", label: "Korean to English" },
+      { href: "/translate/korean-to-spanish", label: "Korean to Spanish" },
+      { href: "/translate/korean-document", label: "Korean Document Translation" },
+      { href: "/translate/translate-korean-contract", label: "Korean Contract Translation" },
+    ],
+    faqs: [
+      {
+        q: "How do I translate Korean documents to Portuguese?",
+        a: "Upload your Korean document (HWP, HWPX, PDF, or DOCX) to Xenith at tryxenith.com. Select Portuguese as the target. Xenith translates the content and preserves your document layout.",
+      },
+      {
+        q: "Can I translate HWP or HWPX files to Portuguese?",
+        a: "Yes. Xenith is the only online translator that opens and translates HWP/HWPX files to Portuguese without requiring Hancom Office.",
+      },
+      {
+        q: "Is Korean to Portuguese translation free?",
+        a: "Yes. Xenith offers free Korean to Portuguese translation for text and documents.",
+      },
+      {
+        q: "Does Xenith support Brazilian Portuguese (pt-BR)?",
+        a: "Yes. Xenith translates Korean into Brazilian Portuguese (pt-BR) and European Portuguese (pt-PT). Brazilian Portuguese is the default target when 'Portuguese' is selected.",
+      },
+      {
+        q: "Can I translate Korean business documents to Portuguese for Brazilian clients?",
+        a: "Yes. Upload your Korean business document (PDF, HWPX, or DOCX) and select Portuguese. Tables, letterheads, and formatting are preserved in the translated output.",
+      },
+      {
+        q: "Can I translate Korean immigration documents to Portuguese?",
+        a: "Yes. Upload Korean certificates, residency documents, or official forms and download a Portuguese translation with the original layout preserved.",
+      },
+    ],
+  },
+
+  "spanish-to-korean": {
+    seo: {
+      en: {
+        title: "Spanish to Korean Translation Online - Text & Documents | Xenith",
+        description:
+          "Translate Spanish to Korean online for free. Supports PDF, DOCX, and plain text. AI-powered translation with format preservation.",
+        h1: "Spanish to Korean Translation",
+        subheading:
+          "Translate Spanish text and documents to Korean — PDF, DOCX, and plain text supported.",
+      },
+    },
+    sourceLang: "es",
+    targetLang: "ko",
+    filesFocused: false,
+    relatedLinks: [
+      { href: "/translate/korean-to-spanish", label: "Korean to Spanish" },
+      { href: "/translate/english-to-korean", label: "English to Korean" },
+      { href: "/translate/korean-to-english", label: "Korean to English" },
+    ],
+    faqs: [
+      {
+        q: "Can I translate Spanish PDF documents to Korean?",
+        a: "Yes. Upload your Spanish PDF to Xenith, select Korean as the target, and download the translated document with the original layout preserved.",
+      },
+      {
+        q: "Is Spanish to Korean translation free?",
+        a: "Yes. Xenith offers free Spanish to Korean translation.",
+      },
+      {
+        q: "How accurate is Spanish to Korean AI translation?",
+        a: "Xenith uses Gemini AI for Spanish to Korean translation, producing natural Korean output including appropriate formality levels (존댓말).",
+      },
+      {
+        q: "Can I translate Spanish business contracts to Korean?",
+        a: "Yes. Upload your Spanish contract as a PDF or DOCX and select Korean. Xenith preserves clause structure and table formatting.",
+      },
+    ],
+  },
+
+  "portuguese-to-korean": {
+    seo: {
+      en: {
+        title: "Portuguese to Korean Translation Online - Text & Documents | Xenith",
+        description:
+          "Translate Portuguese to Korean online for free. Supports PDF, DOCX, and plain text. AI-powered translation with format preservation. For Brazil and Portugal.",
+        h1: "Portuguese to Korean Translation",
+        subheading:
+          "Translate Portuguese (Brazilian or European) text and documents to Korean — PDF and DOCX supported.",
+      },
+    },
+    sourceLang: "pt",
+    targetLang: "ko",
+    filesFocused: false,
+    relatedLinks: [
+      { href: "/translate/korean-to-portuguese", label: "Korean to Portuguese" },
+      { href: "/translate/spanish-to-korean", label: "Spanish to Korean" },
+      { href: "/translate/english-to-korean", label: "English to Korean" },
+    ],
+    faqs: [
+      {
+        q: "Can I translate Portuguese documents to Korean?",
+        a: "Yes. Upload a Portuguese PDF or DOCX to Xenith, select Korean, and download the translated document with preserved formatting.",
+      },
+      {
+        q: "Is Portuguese to Korean translation free?",
+        a: "Yes. Xenith offers free Portuguese to Korean translation.",
+      },
+      {
+        q: "Does Xenith handle Brazilian Portuguese to Korean translation?",
+        a: "Yes. Xenith accurately translates Brazilian Portuguese (pt-BR) to Korean, including informal expressions and Brazilian business terminology.",
+      },
+      {
+        q: "Can I translate Portuguese contracts to Korean?",
+        a: "Yes. Upload your Portuguese contract as a PDF or DOCX and select Korean as the target. Clause numbering and table formatting are preserved.",
+      },
+    ],
+  },
+
   "korean-medical-translation": {
     seo: {
       en: {
