@@ -21,6 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslatorStore } from "@/lib/store";
 import { useTranslateText, useTranslateFile } from "@/lib/api";
 import { getLanguageName } from "@/lib/languages";
+import { EmailCapture } from "@/components/email-capture";
 import {
   trackTextTranslate,
   trackFileTranslate,
@@ -67,6 +68,7 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
   const [preserveFormat, setPreserveFormat] = React.useState(true);
   const [detectedLanguage, setDetectedLanguage] = React.useState<string | null>(null);
   const [copied, setCopied] = React.useState(false);
+  const [showEmailCapture, setShowEmailCapture] = React.useState(false);
 
   const locale = useLocale();
 
@@ -140,6 +142,8 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
           toast.success("File translated and downloaded successfully!");
+          const alreadyCaptured = (() => { try { return !!sessionStorage.getItem("xenith_email_captured") || !!sessionStorage.getItem("xenith_email_dismissed"); } catch { return false; } })();
+          if (!alreadyCaptured) setShowEmailCapture(true);
           trackFileTranslate({
             source_lang: sourceLang,
             target_lang: targetLang,
@@ -457,6 +461,9 @@ export function TranslatorWidget({ fullHeight = false }: { fullHeight?: boolean 
           </div>
         </TabsContent>
       </Tabs>
+      {showEmailCapture && (
+        <EmailCapture source="translate" onDismiss={() => setShowEmailCapture(false)} />
+      )}
     </div>
   );
 }

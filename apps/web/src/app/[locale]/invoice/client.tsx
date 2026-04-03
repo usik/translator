@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useProcessInvoices } from "@/lib/api";
+import { EmailCapture } from "@/components/email-capture";
 import {
   trackInvoiceProcess,
   trackError,
@@ -71,6 +72,7 @@ export function InvoicePageClient() {
   const [files, setFiles] = useState<File[]>([]);
   const [outputFormat, setOutputFormat] = useState("xlsx");
   const [isDragging, setIsDragging] = useState(false);
+  const [showEmailCapture, setShowEmailCapture] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
   const mutation = useProcessInvoices();
@@ -119,6 +121,8 @@ export function InvoicePageClient() {
           a.remove();
           URL.revokeObjectURL(url);
           toast.success("Expense report downloaded!");
+          const alreadyCaptured = (() => { try { return !!sessionStorage.getItem("xenith_email_captured") || !!sessionStorage.getItem("xenith_email_dismissed"); } catch { return false; } })();
+          if (!alreadyCaptured) setShowEmailCapture(true);
           trackInvoiceProcess({
             file_count: files.length,
             output_format: outputFormat,
@@ -283,6 +287,10 @@ export function InvoicePageClient() {
             </Button>
           </div>
         </motion.div>
+
+        {showEmailCapture && (
+          <EmailCapture source="invoice" onDismiss={() => setShowEmailCapture(false)} />
+        )}
 
         {/* Trust row */}
         <motion.div
