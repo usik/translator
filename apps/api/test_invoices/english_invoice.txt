@@ -1,0 +1,48 @@
+INVOICE
+
+Acme Cloud Services, Inc.
+1234 Innovation Drive, Suite 500
+San Francisco, CA 94105
+EIN: 98-7654321
+──────────────────────────────────────────────
+
+Bill To:
+  Xenith Corporation
+  456 Startup Blvd
+  Austin, TX 78701
+
+Invoice Number: ACM-2024-0789
+Invoice Date:   March 25, 2024
+Due Date:       April 25, 2024
+Payment Terms:  Net 30
+
+──────────────────────────────────────────────
+ITEM DESCRIPTION               QTY   RATE      AMOUNT
+──────────────────────────────────────────────
+Enterprise Cloud Platform        1   $2,400.00  $2,400.00
+  (Annual license)
+
+API Gateway - Pro Tier           1   $1,200.00  $1,200.00
+  (Annual subscription)
+
+Data Analytics Module           12     $150.00  $1,800.00
+  (Monthly @ $150/mo)
+
+Professional Services            8     $250.00  $2,000.00
+  (Integration consulting, hrs)
+
+SSL Certificate Renewal          3     $100.00    $300.00
+  (Wildcard, 3 domains)
+
+──────────────────────────────────────────────
+                          Subtotal:  $7,700.00
+                          Sales Tax (8.875%):    $683.38
+                          ─────────────────────
+                          TOTAL DUE: $8,383.38
+──────────────────────────────────────────────
+
+Payment Methods:
+  Wire: Chase Bank, Routing 021000021, Acct 123456789
+  ACH:  Same routing/account
+
+Thank you for your business!

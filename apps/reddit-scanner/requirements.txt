@@ -1,0 +1,3 @@
+# No third-party deps — uses only Python stdlib
+# (urllib, smtplib, json, csv, dataclasses)
+# Gemini called via raw HTTP to avoid adding google-generativeai dep
